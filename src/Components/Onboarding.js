@@ -1,10 +1,10 @@
 import React,{useState,useRef} from "react";
 import {View,Animated,StyleSheet, FlatList,Text, TouchableOpacity} from "react-native";
-import { Colors, Sizes } from "../Constants/constants";
+import { Colors, FontFamily, Sizes } from "../Constants/constants";
 import slides from "../Data/slides";
 import OnboardingItem from "./OnboardingItem";
 import Paginator from "./Paginator";
-
+import { NeuButton } from "neumorphism-ui";
 
 const Onboarding = () =>{
     const scrollX= useRef(new Animated.Value(10)).current;
@@ -48,12 +48,12 @@ const Onboarding = () =>{
                 <Paginator data={slides} scrollX={scrollX} />
                 {
                     currentIndex === slides.length-1 ? (
-                        <TouchableOpacity style={{marginBottom:Sizes.ScreenHeight/10}}>
-                            <Text style={{textAlign:'center',textDecorationStyle:'dotted',textDecorationLine:'underline'}}>Done</Text>
-                        </TouchableOpacity>
+                        <NeuButton onPress={()=>console.log("Done")} style={{ marginBottom:Sizes.ScreenHeight/10,height: 70, width: 120, borderRadius: 50,backgroundColor:Colors.color3 }} noPressedState={true}>
+                            <Text style={{fontFamily:FontFamily.semi_bold,color:"#000"}}>Done</Text>
+                        </NeuButton>
                     ) : (
                         <TouchableOpacity style={{marginBottom:Sizes.ScreenHeight/10}}>
-                            <Text style={{textAlign:'center',textDecorationStyle:'dotted',textDecorationLine:'underline'}}>Skip</Text>
+                            <Text style={{textAlign:'center',textDecorationStyle:'dotted',textDecorationLine:'underline',fontFamily:FontFamily.semi_bold,color:"#000"}}>Skip</Text>
                         </TouchableOpacity>
                     )
                 }
@@ -67,7 +67,8 @@ const styles=StyleSheet.create({
         flex:1,
         justifyContent:"center",
         alignItems:"center"
-    }
+    },
+    
 })
 
 
