@@ -7,6 +7,7 @@ import { Colors } from "./Constants/constants";
 import AuthStack from "./Routers/AuthStack";
 import Login from "./Screens/Auth/Login";
 import Home from "./Screens/Main/Home";
+import StaticMap from "./Screens/Main/Home1";
 
 const App = () =>{
   return(
@@ -14,6 +15,7 @@ const App = () =>{
       <StatusBar backgroundColor={Colors.color5} barStyle="dark-content" />
       {/* <AuthStack /> */}
       <Home />
+      {/* <StaticMap /> */}
     </NavigationContainer>
   )
 }
