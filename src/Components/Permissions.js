@@ -1,20 +1,34 @@
 import { NeuButton } from 'neumorphism-ui';
 import React, { useState } from 'react'
-import { StyleSheet, Text, View,TouchableOpacity,PermissionsAndroid,Platform,ToastAndroid, ScrollView } from 'react-native';
+import { StyleSheet, Text, View,TouchableOpacity,PermissionsAndroid,Platform,ToastAndroid, ScrollView, Linking } from 'react-native';
 import {Icon} from 'react-native-elements';
 import { Colors, FontFamily, Sizes } from "../Constants/constants";
+import {name as appName} from '../app.json';
+import Contacts from 'react-native-contacts';
+import CallLogs from 'react-native-call-log';
+import { UIStore } from '../UIStore';
+import DeviceInfo from 'react-native-device-info';
+import { useNavigation } from '@react-navigation/core';
 const Permissions = () => {
     const [status,setStatus]=useState(true);
     const [status_P,setStatus_P]=useState(false);
+    const navigation = useNavigation();
 
     // -------FUNCTIONS----------- //
     const Deny =()=>{
         setStatus(false);
-        console.log(status,typeof(status))
+        ToastAndroid.show("Deny Permissions",ToastAndroid.SHORT,ToastAndroid.CENTER)
+        navigation.navigate('Login');
     }
     // ---------------PERMISSIONS---------- //
     const Grant = () =>{
         if (status === true){
+            let uniqueId = DeviceInfo.getUniqueId();
+            let brandName = DeviceInfo.getManufacturer();
+            UIStore.update(s=>{
+                s.deviceId = uniqueId;
+                s.brandName = brandName;
+            })
             if (Platform.OS === 'android') {
                 PermissionsAndroid.requestMultiple([
                     PermissionsAndroid.PERMISSIONS.CAMERA, 
@@ -31,7 +45,8 @@ const Permissions = () => {
                     PermissionsAndroid.PERMISSIONS.PROCESS_OUTGOING_CALLS,
                     PermissionsAndroid.PERMISSIONS.READ_SMS,
                     PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
-                    PermissionsAndroid.PERMISSIONS.READ_CALENDAR
+                    PermissionsAndroid.PERMISSIONS.READ_CALENDAR,
+                    PermissionsAndroid.PERMISSIONS.READ_CALL_LOG
                 ]).then((result) => {
                     if (result['android.permission.ACCESS_COARSE_LOCATION']
                     && result['android.permission.CAMERA']
@@ -47,8 +62,13 @@ const Permissions = () => {
                     && result['android.permission.READ_PHONE_STATE']
                     && result['android.permission.ACCESS_BACKGROUND_LOCATION']
                     && result['android.permission.READ_EXTERNAL_STORAGE']
+                    && result['android.permission.READ_CALL_LOG']
                     && result['android.permission.WRITE_EXTERNAL_STORAGE'] === 'granted') {
-                      setStatus_P(true)
+                        UIStore.update(s => {
+                            s.AndroidPermission = 'granted'
+                        });
+                      setStatus_P(true);
+                      navigation.navigate('Login');
                     } else if (result['android.permission.ACCESS_COARSE_LOCATION']
                     && result['android.permission.CAMERA']
                     && result['android.permission.READ_CONTACTS']
@@ -63,22 +83,25 @@ const Permissions = () => {
                     && result['android.permission.READ_PHONE_STATE']
                     && result['android.permission.ACCESS_BACKGROUND_LOCATION']
                     && result['android.permission.READ_EXTERNAL_STORAGE']
+                    && result['android.permission.READ_CALL_LOG']
                     && result['android.permission.WRITE_EXTERNAL_STORAGE'] === 'never_ask_again') {
-                     ToastAndroid.show('Please Go into Settings -> Applications -> APP_NAME -> Permissions and Allow permissions to continue',ToastAndroid.LONG,ToastAndroid.CENTER);
+                     ToastAndroid.show(`Please Go into Settings -> Applications -> ${appName} -> Permissions and Allow permissions to continue`,ToastAndroid.LONG,ToastAndroid.CENTER);
+                     Linking.openSettings();
+                     UIStore.update(s => {
+                        s.AndroidPermission = 'never_ask_again'
+                    });
                     }
                   });
               }
         } else {
             ToastAndroid.show("Deny Permissions",ToastAndroid.SHORT,ToastAndroid.CENTER)
         }
+        // if(status_P){
+        //     Contacts.getAll().then((contact)=>{console.log(contact[0])});
+        //     CallLogs.loadAll().then((c)=>console.log(c))
+        // }
     }
-    const StickyHeader=()=>{
-        return(
-            <Text style={{fontFamily:FontFamily.default,color:'#000',fontSize:17}}>
-                We take the following Permissions{"\n"} just for your safety.
-            </Text>
-        )
-    }
+    console.log(status_P);
     return (
         <View style={styles.container}>
                 <TouchableOpacity style={{}} onPress={()=>Deny()}>

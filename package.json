@@ -10,10 +10,23 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-navigation/native": "^6.0.6",
+    "@react-navigation/native-stack": "^6.2.5",
+    "aadhaar-validator": "^1.1.0",
+    "galio-framework": "^0.8.0",
     "neumorphism-ui": "^1.0.2",
+    "pullstate": "^1.23.0",
     "react": "17.0.2",
     "react-native": "0.66.3",
+    "react-native-call-log": "^2.1.2",
+    "react-native-contacts": "^7.0.2",
+    "react-native-device-info": "^8.4.8",
     "react-native-elements": "^3.4.2",
+    "react-native-get-location": "^2.1.2",
+    "react-native-maps": "^0.29.4",
+    "react-native-phone-number-input": "^2.1.0",
+    "react-native-safe-area-context": "^3.3.2",
+    "react-native-screens": "^3.9.0",
     "react-native-vector-icons": "^9.0.0"
   },
   "devDependencies": {

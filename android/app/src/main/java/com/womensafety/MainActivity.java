@@ -1,4 +1,4 @@
-package com.womensafety;
+package com.womansafety;
 
 import com.facebook.react.ReactActivity;
 

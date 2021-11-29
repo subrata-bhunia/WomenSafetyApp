@@ -5,8 +5,11 @@ import slides from "../Data/slides";
 import OnboardingItem from "./OnboardingItem";
 import Paginator from "./Paginator";
 import { NeuButton } from "neumorphism-ui";
+import { useNavigation } from "@react-navigation/core";
 
 const Onboarding = () =>{
+    const navigation=useNavigation();
+
     const scrollX= useRef(new Animated.Value(10)).current;
 
     const [currentIndex,setCurrentIndex]=useState(0);
@@ -16,7 +19,10 @@ const Onboarding = () =>{
     }).current;
 
     const viewConfig = useRef({viewAreaCoveragePercentThreshold : 50}).current;
-    const slidesRef = useRef(null)
+    const slidesRef = useRef(null);
+    const gotoPermission=()=>{
+        navigation.navigate('Permissions');
+    }
     return(
         <View style={styles.container}>
             <View style={{flex:3}}>
@@ -48,11 +54,11 @@ const Onboarding = () =>{
                 <Paginator data={slides} scrollX={scrollX} />
                 {
                     currentIndex === slides.length-1 ? (
-                        <NeuButton onPress={()=>console.log("Done")} style={{ marginBottom:Sizes.ScreenHeight/10,height: 70, width: 120, borderRadius: 50,backgroundColor:Colors.color3 }} noPressedState={true}>
+                        <NeuButton onPress={()=>gotoPermission()} style={{ marginBottom:Sizes.ScreenHeight/10,height: 70, width: 120, borderRadius: 50,backgroundColor:Colors.color3 }} noPressedState={true}>
                             <Text style={{fontFamily:FontFamily.semi_bold,color:"#000"}}>Done</Text>
                         </NeuButton>
                     ) : (
-                        <TouchableOpacity style={{marginBottom:Sizes.ScreenHeight/10}}>
+                        <TouchableOpacity onPress={()=>gotoPermission()} style={{marginBottom:Sizes.ScreenHeight/10}}>
                             <Text style={{textAlign:'center',textDecorationStyle:'dotted',textDecorationLine:'underline',fontFamily:FontFamily.semi_bold,color:"#000"}}>Skip</Text>
                         </TouchableOpacity>
                     )

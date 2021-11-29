@@ -18,5 +18,5 @@ export default [
         id:4,
         title:"Aliquip magna excepteur aute eu dolor incididunt non nisi nostrud.",
         image:require('../../assets/images/slides/4th.png')
-    },
+    }
 ]
