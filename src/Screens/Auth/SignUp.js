@@ -7,6 +7,7 @@ import React, { useRef, useState } from 'react';
 import PhoneInput from 'react-native-phone-number-input';
 import validator from 'aadhaar-validator'
 import { Icon } from 'react-native-elements';
+import Button from '../../Components/Button';
 const SignUp = () => {
     const {width}=useWindowDimensions();
     const navigation = useNavigation();
@@ -44,10 +45,10 @@ const SignUp = () => {
             <View style={{flex:1.3}}>
             <View
               style={{flexDirection:'row',justifyContent:'flex-end',width:'100%',alignSelf:'center'}}>
-                <TouchableOpacity style={{height:50,width:50,borderWidth:1,alignItems:'center',justifyContent:'center',borderRadius:10,backgroundColor:'#fff',margin:5}}>
+                <TouchableOpacity activeOpacity={0.4} style={{elevation:5, height:50,width:50,borderWidth:0,alignItems:'center',justifyContent:'center',borderRadius:10,backgroundColor:'#fff',margin:5}}>
                     <Image style={{height:30,width:30,resizeMode:'contain'}} source={require('../../../assets/images/logos/google.png')} />
                 </TouchableOpacity>
-                <TouchableOpacity style={{height:50,width:50,borderWidth:1,alignItems:'center',justifyContent:'center',borderRadius:10,backgroundColor:"#fff",margin:5}}>
+                <TouchableOpacity activeOpacity={0.4} style={{elevation:5,height:50,width:50,borderWidth:0,alignItems:'center',justifyContent:'center',borderRadius:10,backgroundColor:"#fff",margin:5}}>
                     <Image style={{height:30,width:30,resizeMode:'contain'}} source={require('../../../assets/images/logos/facebook.png')} />
                 </TouchableOpacity>
             </View>
@@ -132,9 +133,20 @@ const SignUp = () => {
                  />
                 </View>
                 <View style={{alignItems:'center',alignSelf:'center'}}>
-                <NeuButton onPress={()=>console.log("Sign in now")} style={{height: 70,width:Sizes.ScreenWidth*0.5, borderRadius: 50,backgroundColor:Colors.color3 }} noPressedState={true}>
-                    <Text style={{fontFamily:FontFamily.semi_bold,color:"#000"}}>Submit now</Text>
-                </NeuButton>
+                <Button
+                     onPress={()=>navigation.navigate('Home')} 
+                     btnStyle={{
+                         height: 55,
+                         width:Sizes.ScreenWidth*0.5, 
+                         borderRadius: 50,
+                         backgroundColor:Colors.color5 
+                         }} 
+                     textStyle={{
+                         fontFamily:FontFamily.semi_bold,
+                         color:"#000"
+                        }}
+                     btnName="Submit now"
+                    />
                 </View>
             </View>
         </View>

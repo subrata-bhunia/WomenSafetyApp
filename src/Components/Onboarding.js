@@ -6,6 +6,7 @@ import OnboardingItem from "./OnboardingItem";
 import Paginator from "./Paginator";
 import { NeuButton } from "neumorphism-ui";
 import { useNavigation } from "@react-navigation/core";
+import Button from "./Button";
 
 const Onboarding = () =>{
     const navigation=useNavigation();
@@ -54,9 +55,13 @@ const Onboarding = () =>{
                 <Paginator data={slides} scrollX={scrollX} />
                 {
                     currentIndex === slides.length-1 ? (
-                        <NeuButton onPress={()=>gotoPermission()} style={{ marginBottom:Sizes.ScreenHeight/10,height: 70, width: 120, borderRadius: 50,backgroundColor:Colors.color3 }} noPressedState={true}>
-                            <Text style={{fontFamily:FontFamily.semi_bold,color:"#000"}}>Done</Text>
-                        </NeuButton>
+                        <Button
+                         onPress={()=>gotoPermission()} 
+                         btnStyle={{marginBottom:Sizes.ScreenHeight/12,height: 50, width: 100, borderRadius: 50,backgroundColor:Colors.color4,alignItems:'center',justifyContent:'center',elevation:5 }}
+                         textStyle={{fontFamily:FontFamily.semi_bold,color:"#000",textAlign:'center'}}
+                         btnName="Done"
+                         />
+                        
                     ) : (
                         <TouchableOpacity onPress={()=>gotoPermission()} style={{marginBottom:Sizes.ScreenHeight/10}}>
                             <Text style={{textAlign:'center',textDecorationStyle:'dotted',textDecorationLine:'underline',fontFamily:FontFamily.semi_bold,color:"#000"}}>Skip</Text>
