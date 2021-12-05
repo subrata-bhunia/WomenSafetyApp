@@ -12,9 +12,9 @@ import StaticMap from "./Screens/Main/Home1";
 const App = () =>{
   return(
     <NavigationContainer>
-      <StatusBar backgroundColor={Colors.color5} barStyle="dark-content" />
-      {/* <AuthStack /> */}
-      <Home />
+      <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
+      <AuthStack />
+      {/* <Home /> */}
       {/* <StaticMap /> */}
     </NavigationContainer>
   )
@@ -24,7 +24,7 @@ const styles=StyleSheet.create({
       flex:1,
       justifyContent:"center",
       alignItems:"center",
-      backgroundColor:Colors.color5
+      backgroundColor:Colors.color1
   }
 })
 export default App;

@@ -9,6 +9,7 @@ import CallLogs from 'react-native-call-log';
 import { UIStore } from '../UIStore';
 import DeviceInfo from 'react-native-device-info';
 import { useNavigation } from '@react-navigation/core';
+import Button from './Button';
 const Permissions = () => {
     const [status,setStatus]=useState(true);
     const [status_P,setStatus_P]=useState(false);
@@ -104,7 +105,7 @@ const Permissions = () => {
     console.log(status_P);
     return (
         <View style={styles.container}>
-                <TouchableOpacity style={{}} onPress={()=>Deny()}>
+                <TouchableOpacity style={{marginTop:20}} onPress={()=>Deny()}>
                     <Text style={{textAlign:'right',textDecorationStyle:'dotted',textDecorationLine:'underline',fontFamily:FontFamily.semi_bold,padding:20}}>Deny Permissions</Text>
                 </TouchableOpacity>
                 <ScrollView stickyHeaderIndices={[0]} contentContainerStyle={{marginTop:0,padding:40}}>
@@ -201,9 +202,25 @@ const Permissions = () => {
                     
                     </ScrollView>
                     <View>
-                        <NeuButton onPress={()=>Grant()} style={{height: 70, borderRadius: 50,backgroundColor:Colors.color3 }} noPressedState={true}>
-                            <Text style={{fontFamily:FontFamily.semi_bold,color:"#000"}}>Grant Permissions</Text>
-                        </NeuButton>
+                        <Button
+                          onPress={()=>Grant()} 
+                          btnStyle={{
+                              height: 50, 
+                              width:Sizes.ScreenWidth*0.9,
+                              borderRadius: 50,
+                              backgroundColor:Colors.color4,
+                              elevation:5,
+                              alignItems:'center',
+                              justifyContent:'center',
+                              marginBottom:10,
+                              alignSelf:'center'
+                            }}
+                            textStyle={{
+                                fontFamily:FontFamily.semi_bold,
+                                color:"#000"
+                            }}
+                            btnName="Grant Permissions"
+                            />
                     </View>
             </View>
     )
