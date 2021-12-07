@@ -6,10 +6,28 @@ import GetLocation ,{PROVIDER_GOOGLE} from 'react-native-get-location';
 import {BallIndicator} from 'react-native-indicators';
 import { UIStore } from '../../UIStore';
 import { Icon } from 'react-native-elements';
-import { NeuButton } from 'neumorphism-ui';
 import Button from '../../Components/Button';
+import chL from '../../../assets/voices/chL.mp3';
+var Sound = require('react-native-sound');
 const Home = () => {
-    const currentLocation = UIStore.useState(s=>s.lastLocation)
+    const currentLocation = UIStore.useState(s=>s.lastLocation);
+    Sound.setCategory('Playback');
+    var audio = new Sound(chL, error => {
+        if (error) {
+          console.log('failed to load the sound', error);
+          return;
+        }
+        // if loaded successfully
+        console.log('duration in seconds: ' + audio.getDuration() + 'number of channels: ' + audio.getNumberOfChannels());
+        // audio.play(success => {
+        //     if (success) {
+        //       console.log('successfully finished playing');
+        //     } else {
+        //       console.log('playback failed due to audio decoding errors');
+        //     }
+        //   });
+      });
+      
     useEffect(() => {
         GetLocation.getCurrentPosition({
             enableHighAccuracy:true,
@@ -20,10 +38,23 @@ const Home = () => {
             })
             console.log('location')
         })
-        .catch((err)=>console.log("err===>",err))
+        .catch((err)=>{
+            console.log("err===>",err);
+            audio.play(success=>{
+                if (success) {
+                    console.log('successfully finished playing');
+                  } else {
+                    console.log('playback failed due to audio decoding errors');
+                  }
+            });
+            audio.setNumberOfLoops(-1);
+        });
+        // ----
+        
     },[])
 
     // console.log("currentLocation =>",currentLocation)
+
     return (
         <SafeAreaView style={styles.container}>
             {/* <StatusBar hidden /> */}
@@ -272,13 +303,16 @@ const Home = () => {
                     <TouchableOpacity
                      onPress={()=>console.log("Sign in now")} 
                      style={{
-                         height: 170,
-                         width:170, 
-                         borderRadius: 85,
+                         height: 150,
+                         width:150, 
+                         borderRadius: 75,
                          backgroundColor:Colors.color1,
                          alignItems:'center',
                          elevation:5,
-                          justifyContent:'center'
+                         justifyContent:'center',
+                         borderWidth:10,
+                         borderStyle:'dashed',
+                         borderColor:Colors.color1
                           }}
                           activeOpacity={0.4}
                           >
