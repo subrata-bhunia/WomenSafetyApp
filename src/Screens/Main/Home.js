@@ -8,6 +8,7 @@ import { UIStore } from '../../UIStore';
 import { Icon } from 'react-native-elements';
 import Button from '../../Components/Button';
 import chL from '../../../assets/voices/chL.mp3';
+import { useNavigation } from '@react-navigation/native';
 var Sound = require('react-native-sound');
 const Home = () => {
     const currentLocation = UIStore.useState(s=>s.lastLocation);
@@ -52,11 +53,25 @@ const Home = () => {
         // ----
         
     },[])
+// ------------------------------------------- //
+    const navigation = useNavigation();
+
+    function gotoSafetyTips(){
+        navigation.navigate('SafetyTips');
+    }
+    function gotoCircles(){
+        navigation.navigate('Circles');
+    }
+    function gotoSafeZone(){
+        navigation.navigate('SafeZone');
+    }
 
     // console.log("currentLocation =>",currentLocation)
 
     return (
         <SafeAreaView style={styles.container}>
+            <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
+
             {/* <StatusBar hidden /> */}
             {
                 currentLocation === null ? <BallIndicator />: (
@@ -139,12 +154,12 @@ const Home = () => {
                     </MapView>
                 )
             }
-            <View style={{position:'absolute',top:10}}>
-                <View>
+            <View style={{position:'absolute',top:100}}>
+                {/* <View>
                     <TouchableOpacity>
                         <Icon name='menu' type="entypo" size={50} color='grey' style={{alignSelf:'flex-start',margin:20 ,elevation:5}} />
                     </TouchableOpacity>
-                </View>
+                </View> */}
                 {/* ------------------------- */}
                 <View
                  style={{
@@ -157,7 +172,7 @@ const Home = () => {
                      }}>
                     <View>
                         <Button
-                    //  onPress={()=>navigation.navigate('Home')} 
+                     onPress={()=>gotoSafetyTips()} 
                      btnStyle={{
                          height: 50,
                          width:Sizes.ScreenWidth*0.4, 
@@ -179,7 +194,7 @@ const Home = () => {
                     </View>
                     <View>
                     <Button
-                    //  onPress={()=>navigation.navigate('Home')} 
+                     onPress={()=>gotoCircles()} 
                      btnStyle={{
                          height: 50,
                          width:Sizes.ScreenWidth*0.4, 
@@ -209,7 +224,7 @@ const Home = () => {
                      marginLeft:-10
                      }}>
                 <Button
-                    //  onPress={()=>navigation.navigate('Home')} 
+                     onPress={()=>gotoSafeZone()} 
                      btnStyle={{
                          height: 50,
                          width:Sizes.ScreenWidth*0.4, 
