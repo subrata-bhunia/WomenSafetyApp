@@ -1,21 +1,19 @@
 import { NavigationContainer } from "@react-navigation/native";
-import React from "react";
-import { View,StyleSheet, StatusBar } from "react-native";
-import Onboarding from './Components/Onboarding';
-import Permissions from "./Components/Permissions";
+import React, { useState } from "react";
+import { StyleSheet } from "react-native";
 import { Colors } from "./Constants/constants";
+import AppNav from "./Routers/AppNav";
 import AuthStack from "./Routers/AuthStack";
-import Login from "./Screens/Auth/Login";
-import Home from "./Screens/Main/Home";
-import StaticMap from "./Screens/Main/Home1";
+
 
 const App = () =>{
+  const [login,setLogin]=useState(true);
   return(
     <NavigationContainer>
-      <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
-      <AuthStack />
-      {/* <Home /> */}
-      {/* <StaticMap /> */}
+      
+      {
+        login ? <AppNav /> : <AuthStack />
+      }
     </NavigationContainer>
   )
 }
