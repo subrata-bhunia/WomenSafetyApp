@@ -1,5 +1,5 @@
 import React,{useState,useRef} from "react";
-import {View,Animated,StyleSheet, FlatList,Text, TouchableOpacity} from "react-native";
+import {View,Animated,StyleSheet, FlatList,Text, TouchableOpacity, StatusBar} from "react-native";
 import { Colors, FontFamily, Sizes } from "../Constants/constants";
 import slides from "../Data/slides";
 import OnboardingItem from "./OnboardingItem";
@@ -7,6 +7,7 @@ import Paginator from "./Paginator";
 import { NeuButton } from "neumorphism-ui";
 import { useNavigation } from "@react-navigation/core";
 import Button from "./Button";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Onboarding = () =>{
     const navigation=useNavigation();
@@ -21,11 +22,17 @@ const Onboarding = () =>{
 
     const viewConfig = useRef({viewAreaCoveragePercentThreshold : 50}).current;
     const slidesRef = useRef(null);
-    const gotoPermission=()=>{
-        navigation.navigate('Permissions');
+    const gotoPermission= async()=>{
+        try {
+            await AsyncStorage.setItem('@viewedOnboarding','true'); 
+            navigation.navigate('Permissions');
+        } catch (error) {
+            console.log(error)
+        }
     }
     return(
         <View style={styles.container}>
+            <StatusBar translucent backgroundColor={'transparent'} barStyle="dark-content" />
             <View style={{flex:3}}>
                 <FlatList
                     data={slides} 

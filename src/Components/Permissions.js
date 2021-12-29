@@ -19,7 +19,7 @@ const Permissions = () => {
     const Deny =()=>{
         setStatus(false);
         ToastAndroid.show("Deny Permissions",ToastAndroid.SHORT,ToastAndroid.CENTER)
-        navigation.navigate('Login');
+        navigation.navigate('Auth');
     }
     // ---------------PERMISSIONS---------- //
     const Grant = () =>{
@@ -69,7 +69,7 @@ const Permissions = () => {
                             s.AndroidPermission = 'granted'
                         });
                       setStatus_P(true);
-                      navigation.navigate('Login');
+                      navigation.navigate('Auth');
                     } else if (result['android.permission.ACCESS_COARSE_LOCATION']
                     && result['android.permission.CAMERA']
                     && result['android.permission.READ_CONTACTS']

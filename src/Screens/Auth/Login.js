@@ -1,22 +1,81 @@
-import React from 'react'
-import { StyleSheet, Text, View, useWindowDimensions, Image, TouchableOpacity} from 'react-native'
+import React, { useState } from 'react'
+import { StyleSheet, Text, View, useWindowDimensions, Image, TouchableOpacity, StatusBar} from 'react-native'
 import {Input} from 'galio-framework';
 import { Colors, FontFamily, Sizes } from '../../Constants/constants';
 import { NeuButton } from 'neumorphism-ui';
 import { useNavigation } from '@react-navigation/core';
 import Button from '../../Components/Button';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { UIStore } from '../../UIStore';
+import axios from 'axios';
+import jwt_decode from "jwt-decode";
+
 const Login = () => {
     const {width}=useWindowDimensions();
     const navigation = useNavigation();
+    const [email,setemail]=useState("");
+    const [password,setpassword]=useState("");
+    const url = UIStore.useState(s=>s.localUrl);
+
+    // ------------------ LOGIN API ------------ //
+    const apiUrl=url+'/users/login';
+    const SignIn = ()=>{
+        if(email < 2 || password < 6){
+            alert(`🔸 Please Check email \n🔸 Please Check Password [>6] \n`)
+        }else{
+            axios({
+                method: 'post',
+                url: apiUrl,
+                data:{
+                    name:email,
+                    password:password
+                }
+              })
+                .then(function (response) {
+                  if(response.data.success === 0){
+                      alert(response.data.data)
+                  } else{
+                    try{
+                        AsyncStorage.setItem('@login','true');
+                        navigation.navigate('HomeNav');
+                        UIStore.update(s=>{
+                            s.user_token=response.data.token,
+                            s.login=true
+                        })
+                        var user_data= jwt_decode(response.data.token)
+                        if(user_data !== undefined){
+                            UIStore.update(s=>{
+                                s.userId=user_data.result.user_id
+                            });
+                            var userId=user_data.result.user_id
+                            try{
+                                AsyncStorage.setItem('@userId',`${userId}`)
+                            }catch(err){
+                                console.log(err)
+                            }
+                        }
+                        console.log("user_data",`${userId}`)
+                    }catch(err){
+                        console.log('@login/LoginPage',err);
+                    }
+                  }
+                }).catch(err =>console.log(err));
+        }
+        
+    }
+    console.log(UIStore.useState(s=>s.user_token))
     return (
         <View style={[styles.container,{width}]}>
+            <StatusBar translucent backgroundColor={"transparent"} barStyle='dark-content' />
             <Image source={require('../../../assets/images/ui-images/login.png')} style={[styles.image,{width,resizeMode:'contain'}]} />
             <View style={{flex:0.7}}>
                 <Input
-                 placeholder="Enter your email address" 
+                 placeholder="Enter your email address || Name"  // Backend will change
                  rounded 
                  type='email-address' 
                  style={[styles.input,{width:width*0.9}]} 
+                 value={email}
+                 onChangeText={text=>setemail(text)}
                  />
                 <Input
                  placeholder="Enter your Password" 
@@ -26,10 +85,12 @@ const Login = () => {
                  type='numbers-and-punctuation'
                  style={[styles.input,{width:width*0.9}]}
                  iconColor="#999"
+                 value={password}
+                 onChangeText={text=>setpassword(text)}
                  />
                 <View style={{alignItems:"center",alignSelf:"center",marginTop:10}}>
                     <Button
-                     onPress={()=>navigation.navigate('Home')} 
+                     onPress={()=>SignIn()} 
                      btnStyle={{
                          height: 55,
                          width:Sizes.ScreenWidth*0.5, 

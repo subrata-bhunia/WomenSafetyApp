@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, useWindowDimensions, Image, TouchableOpacity} from 'react-native'
+import { StyleSheet, Text, View, useWindowDimensions, Image, TouchableOpacity, ToastAndroid} from 'react-native'
 import {Input} from 'galio-framework';
 import { Colors, FontFamily, Sizes } from '../../Constants/constants';
 import { NeuButton } from 'neumorphism-ui';
@@ -8,32 +8,62 @@ import PhoneInput from 'react-native-phone-number-input';
 import validator from 'aadhaar-validator'
 import { Icon } from 'react-native-elements';
 import Button from '../../Components/Button';
+import { UIStore } from '../../UIStore';
+import axios from 'axios';
 const SignUp = () => {
     const {width}=useWindowDimensions();
     const navigation = useNavigation();
     const [value,setValue]=useState('');
-    const [formattedValue, setFormattedValue] = useState("");
     const [aadhar,setAadhar]=useState("");
     const [vaild_aa,setVaildAadhar]=useState(null);
-    const [validMobile,setValidMobile]=useState(null);
     const phoneInput = useRef(null);
+    const url = UIStore.useState(s=>s.localUrl);
+
+    // ---------------- AADHAR CARD CHECK ---------- //
     const handleCardNumber = (text) => {
-        var txt = validator.isValidNumber(text.split(' ').join(''));
+        var txt = validator.isValidNumber(text.split('-').join(''));
         setVaildAadhar(txt);
-        if(text.split(' ').join('').length < 1){
+        if(text.split('-').join('').length < 1){
             setVaildAadhar(null)
         }
-        let formattedText = text.split(' ').join('');
+        let formattedText = text.split('-').join('');
+        setaadhar_card(formattedText)
         if (formattedText.length > 0) {
-          formattedText = formattedText.match(new RegExp('.{1,4}', 'g')).join(' ');
+          formattedText = formattedText.match(new RegExp('.{1,4}', 'g')).join('-');
         }
         setAadhar(formattedText)
         return formattedText;
       }
-    const isVaild = (text) =>{
-        if(text.length > 9){
-            var vaild = phoneInput.current?.isValidNumber(text);
+    // -------------------- //
+    var apiUrl = url+'/users/' 
+    var [name,setName]=useState("");
+    var [aadhar_card,setaadhar_card]=useState("");
+    var [email,setemail]=useState("");
+    var [password,setpassword]=useState("");
+
+    const signUpUser=()=>{
+        if(name.length < 2 || !vaild_aa || value.length < 10 || password < 6 ){
+            alert(`🔸 Please Check Name \n🔸 Please Check Aadhar Number \n🔸 Please Check Mobile Number \n🔸 Please Check email \n🔸 Please Check Password [>6] \n`)
+        }else{
+            axios({
+                method: 'post',
+                url: apiUrl,
+                data:{
+                    name:name,
+                    aadhar_card:aadhar_card,
+                    phone:value,
+                    email:email,
+                    password:password
+                }
+              })
+                .then(function (response) {
+                  msg(response.data)
+                }).catch(err => alert("Something went to worng !"));
         }
+    }
+    const msg =(response)=>{
+        navigation.goBack();
+        ToastAndroid.show(response.message,ToastAndroid.SHORT,ToastAndroid.CENTER)
     }
     return (
         <View style={[styles.container]}>
@@ -59,6 +89,10 @@ const SignUp = () => {
                 rounded 
                 type='email-address' 
                 style={[styles.input,{width:width*0.9}]} 
+                value={name}
+                onChangeText={(text) => {
+                    setName(text);
+                  }}
                 />
            <Input
                 placeholder="Enter your 12 digit Aadhar Card Number" 
@@ -82,9 +116,9 @@ const SignUp = () => {
                 onChangeText={(text) => {
                   setValue(text);
                 }}
-                onChangeFormattedText={(text) => {
-                  setFormattedValue(text);
-                }}
+                // onChangeFormattedText={(text) => {
+                //   setFormattedValue(text);
+                // }}
                 containerStyle={{
                     // height:50,
                     width:width*0.9,
@@ -121,6 +155,10 @@ const SignUp = () => {
                 rounded 
                 type='email-address' 
                 style={[styles.input,{width:width*0.9}]} 
+                value={email}
+                onChangeText={(text) => {
+                    setemail(text);
+                  }}
                 />
             <Input
                  placeholder="Enter your Password" 
@@ -130,11 +168,15 @@ const SignUp = () => {
                  type='numbers-and-punctuation'
                  style={[styles.input,{width:width*0.9}]}
                  iconColor="#999"
+                 value={password}
+                onChangeText={(text) => {
+                    setpassword(text);
+                  }}
                  />
                 </View>
                 <View style={{alignItems:'center',alignSelf:'center'}}>
                 <Button
-                     onPress={()=>navigation.navigate('Home')} 
+                     onPress={()=>signUpUser()} 
                      btnStyle={{
                          height: 55,
                          width:Sizes.ScreenWidth*0.5, 
