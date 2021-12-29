@@ -7,7 +7,8 @@ export const Colors = {
     color2:"#4A97FF",
     color3:"#CCE1FF",
     color4:"#EBEBEB",
-    color5:'#F3F3F3'
+    color5:'#F3F3F3',
+    TextColor:'#000'
 }
 //----------------- Fonts --------------//
 export const FontFamily = {
@@ -18,5 +19,6 @@ export const FontFamily = {
 // ---------------Sizes-------------------//
 export const Sizes={
     ScreenHeight:Dimensions.get("window").height,
-    ScreenWidth:Dimensions.get("window").width
+    ScreenWidth:Dimensions.get("window").width,
+    iconSize:30
 }

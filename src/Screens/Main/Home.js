@@ -9,6 +9,7 @@ import { Icon } from 'react-native-elements';
 import Button from '../../Components/Button';
 import chL from '../../../assets/voices/chL.mp3';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 var Sound = require('react-native-sound');
 const Home = () => {
     const currentLocation = UIStore.useState(s=>s.lastLocation);
@@ -29,6 +30,33 @@ const Home = () => {
         //   });
       });
       
+      const clearAscynStorage = async()=>{
+        try {
+         AsyncStorage.clear((err)=>{
+             if (!err){
+                 console.log("clearAscynStorage");
+             }
+
+         })
+        } catch (error) {
+          console.log("Error clearAscynStorage",error)
+        }
+      }
+      const checkUserId = async()=>{
+        try {
+         const value =await AsyncStorage.getItem('@userId')
+    
+         if(value !== null){
+           console.log("UserID/HOME",value);
+           UIStore.update(s=>{
+               s.userId=value
+           })
+         }
+    
+        } catch (error) {
+          console.log("checkUserId/Home",error)
+        }
+      }
     useEffect(() => {
         GetLocation.getCurrentPosition({
             enableHighAccuracy:true,
@@ -52,6 +80,9 @@ const Home = () => {
         });
         // ----
         
+        //   --------------
+          checkUserId();
+        
     },[])
 // ------------------------------------------- //
     const navigation = useNavigation();
@@ -67,6 +98,8 @@ const Home = () => {
     }
 
     // console.log("currentLocation =>",currentLocation)
+
+    
 
     return (
         <SafeAreaView style={styles.container}>
@@ -90,7 +123,7 @@ const Home = () => {
                             opacity:0.6
                         }}
                         mapType='standard'
-                        showsMyLocationButton={true}
+                        // showsMyLocationButton={true}
                     >
                         <Marker
                          coordinate={{
@@ -316,14 +349,15 @@ const Home = () => {
             <View style={{position:'absolute',bottom:20,alignSelf:'center'}}>
                 <View>
                     <TouchableOpacity
-                     onPress={()=>console.log("Sign in now")} 
+                    //  onPress={()=>AsyncStorage.clear((err)=>console.log("Error Clear",err))} 
+                     onPress={()=>clearAscynStorage()} 
                      style={{
                          height: 150,
                          width:150, 
                          borderRadius: 75,
                          backgroundColor:Colors.color1,
                          alignItems:'center',
-                         elevation:5,
+                         elevation:1,
                          justifyContent:'center',
                          borderWidth:10,
                          borderStyle:'dashed',
