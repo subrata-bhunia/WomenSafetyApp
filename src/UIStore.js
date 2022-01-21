@@ -12,5 +12,5 @@ export const UIStore = new Store({
     user_token:null,
     user_type:"user" ,// user || admin || local_admin(like police,guradian),
     backendUrl:'', // Backend URL
-    localUrl:'http://10.0.2.2:3000/api' , // Local Backend Url
+    localUrl:'https://woman-safety-backend.vercel.app/api' , // Local Backend Url
 })

@@ -16,6 +16,7 @@ import { Colors, FontFamily, Sizes as SIZES } from '../../Constants/constants';
 import dummyData from '../../Data/dummy.data';
 import { UIStore } from '../../UIStore';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { BallIndicator } from 'react-native-indicators';
 
 const IconType = 'ionicon'
 // -------------------- //
@@ -68,7 +69,7 @@ const ProfilePic=({imgUrl})=>{
 }
 // -------------------- //
 const CountSessions=({userDetail})=>{
-    console.log("userDetail/69",userDetail)
+    console.log("userDetail/72",userDetail)
     return(
         <View>
             <Text style={{fontFamily:FontFamily.semi_bold,color:Colors.TextColor,textAlign:'center',fontSize:17}}>
@@ -150,49 +151,57 @@ const Profile1 =()=>{
     },[])
     return(
         <View style={styles.Main}>
-            <CustomHeader2 />
-            <View>
-                <Top />
-                <ProfilePic imgUrl="https://i.pinimg.com/originals/73/16/f5/7316f550de9ca0045e3d8d98a5bb5e44.png" />
-            </View>
-            <View style={styles.SEC2}>
-                <CountSessions userDetail={userDetail}  />
-                <View style={styles.COMPLETEVIEW}>
-                    <Text style={[styles.COMPLETETEXT,{fontFamily:FontFamily.semi_bold}]}>
-                        Unsecure Places
-                    </Text>
-                </View>
-                <View>
-                    <FlatList
-                     renderItem={CardView}
-                     data={dummyData}
-                     horizontal
-                     showsHorizontalScrollIndicator={false}
-                     keyExtractor={(index)=>index.navigate}
-                     />
-                </View>
-                <View>
-                <Button
-                     onPress={()=>LogOut()} 
-                     btnStyle={{
-                         height: 50,
-                         width:SIZES.ScreenWidth*0.4, 
-                         borderRadius: 50,
-                         backgroundColor:Colors.color5,
-                         marginTop:10
-                         }} 
-                     textStyle={{
-                         fontFamily:FontFamily.semi_bold,
-                         color:"#000"
-                        }}
-                     btnName=" Log Out"
-                     icon= {{
-                        name:'account-group-outline',
-                        type:'material-community',
-                    }}
-                    />
-                </View>
-            </View>
+            {
+                userDetail === null ? <BallIndicator  /> :(
+                    <>
+                        <CustomHeader2 />
+                        <View>
+                            <Top />
+                            <ProfilePic imgUrl="https://i.pinimg.com/originals/73/16/f5/7316f550de9ca0045e3d8d98a5bb5e44.png" />
+                        </View>
+                        <View style={styles.SEC2}>
+                            <CountSessions userDetail={userDetail}  />
+                            <View style={styles.COMPLETEVIEW}>
+                                <Text style={[styles.COMPLETETEXT,{fontFamily:FontFamily.semi_bold}]}>
+                                    Unsecure Places
+                                </Text>
+                            </View>
+                            <View>
+                                <FlatList
+                                renderItem={CardView}
+                                data={dummyData}
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                                keyExtractor={(index)=>index.navigate}
+                                />
+                            </View>
+                            <View>
+                            <Button
+                                onPress={()=>LogOut()} 
+                                btnStyle={{
+                                    height: 50,
+                                    width:SIZES.ScreenWidth*0.4, 
+                                    borderRadius: 50,
+                                    backgroundColor:Colors.color5,
+                                    marginTop:10
+                                    }} 
+                                textStyle={{
+                                    fontFamily:FontFamily.semi_bold,
+                                    color:"#000"
+                                    }}
+                                btnName=" Log Out"
+                                icon= {{
+                                    name:'logout',
+                                    type:'antdesign',
+                                    color:Colors.color1
+                                }}
+                                />
+                            </View>
+                        </View>
+                    </>
+                )
+            }
+            
         </View>
     )
 }

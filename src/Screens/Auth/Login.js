@@ -27,7 +27,7 @@ const Login = () => {
                 method: 'post',
                 url: apiUrl,
                 data:{
-                    name:email,
+                    full_name:email,
                     password:password
                 }
               })

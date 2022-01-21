@@ -1,6 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet,Text } from "react-native";
 import { Colors } from "./Constants/constants";
 import AppNav from "./Routers/AppNav";
 import AuthStack from "./Routers/AuthStack";
@@ -50,7 +50,7 @@ const App = () =>{
         backgroundColor={"#fff"}
         logoHeight={150}
         logoWidth={150}
-        // preload={true}
+        // customComponent={<Text>Feel Save Anywhere and Everywhere</Text>}
       >
         {
           onboard ? login ? <AppNav /> : <AuthStack /> : <OnBoard />
