@@ -17,6 +17,7 @@ import dummyData from '../../Data/dummy.data';
 import { UIStore } from '../../UIStore';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BallIndicator } from 'react-native-indicators';
+import CustomLoader from '../../Components/CustomLoader';
 
 const IconType = 'ionicon'
 // -------------------- //
@@ -131,6 +132,7 @@ const Profile1 =()=>{
                 method: 'get',
                 url: apiUrl,
               }).then(res=>setuserDetail(res.data.data))
+              .catch(err=>console.log("USERDETAILS",err))
         }
     }
     // --------------------- LOG OUT ------------- //
@@ -152,7 +154,7 @@ const Profile1 =()=>{
     return(
         <View style={styles.Main}>
             {
-                userDetail === null ? <BallIndicator  /> :(
+                userDetail === null ? <CustomLoader loaderStyle={{height:100,width:100}} /> :(
                     <>
                         <CustomHeader2 />
                         <View>

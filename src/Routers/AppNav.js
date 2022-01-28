@@ -7,13 +7,15 @@ import SafetyTips from '../Screens/Main/SafetyTips';
 import SafeZone from '../Screens/Main/SafeZone';
 import Circles from '../Screens/Main/Circles';
 import Home from '../Screens/Main/Home';
+import AuthStack from './AuthStack';
+import SafetyDetails from '../Screens/Main/SafetyDetails';
 // -----------TAB---------------- //
 import Settings from '../Screens/Main/Settings';
 import Profile from '../Screens/Main/Profile';
 import About from '../Screens/Main/About';
 import { Colors, FontFamily } from '../Constants/constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import AuthStack from './AuthStack';
+
 const HomeStack =createNativeStackNavigator();
 
 function HomeStackScreen(){
@@ -28,6 +30,7 @@ function HomeStackScreen(){
             <HomeStack.Screen name='SafeZone' component={SafeZone}/>
             <HomeStack.Screen name='Circles' component={Circles}/>
             <HomeStack.Screen name='Login' component={AuthStack}/>
+            <HomeStack.Screen name='SafetyTipsDetails' component={SafetyDetails}/>
         </HomeStack.Navigator>
     )
 }
