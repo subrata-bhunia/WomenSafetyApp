@@ -28,7 +28,7 @@ const App = () =>{
   const checkLogin = async()=>{
     try {
      const value = await AsyncStorage.getItem('@login');
-
+     console.log("value_login_AS",value);
      if(value !== null){
        setLogin(true)
      }

@@ -7,7 +7,8 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "ok":"code . && react-native run-android"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.15.14",
@@ -38,7 +39,9 @@
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.9.0",
     "react-native-sound": "^0.11.1",
-    "react-native-vector-icons": "^9.0.0"
+    "react-native-vector-icons": "^9.0.0",
+    "react-redux": "^7.2.6",
+    "redux": "^4.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

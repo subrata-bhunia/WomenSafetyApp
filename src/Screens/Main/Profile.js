@@ -123,14 +123,18 @@ const CardView=({item,index})=>{
 const Profile1 =()=>{
     const userId= UIStore.useState(s=>s.userId);
     const url = UIStore.useState(s=>s.localUrl);
-    const [userDetail,setuserDetail]=useState(null);
+    const [userDetail,setuserDetail]=useState({
+        photo:"https://source.unsplash.com/random/?girl",
+        full_name:'Purbita Patra',
+        email:"purbita@womansafetyapp.com"
+    });
     const [Model,setModal]=useState(false);
     const navigation =useNavigation();
     // ----------- USER DETAILS  ------------- //
     const apiUrl =url+'/users/'+userId;
-    const userDetails=()=>{
+    const userDetails=async()=>{
         if(userId){
-            axios({
+            await axios({
                 method: 'get',
                 url: apiUrl,
               }).then(res=>setuserDetail(res?.data?.data))
@@ -144,14 +148,15 @@ const Profile1 =()=>{
             await AsyncStorage.removeItem('@userId');
             const val = await AsyncStorage.getItem('@login');
             if(val === null){
-                navigation.navigate("Login")
+                navigation.navigate("Login1");
+                setModal(false)
             }
         }catch(err){
             console.log("ERROR/PROFILE/142",err);
         }
     }
     useEffect(()=>{
-        userDetails();
+        // userDetails();
     },[])
     return(
         <View style={styles.Main}>
@@ -193,20 +198,20 @@ const Profile1 =()=>{
                                     fontFamily:FontFamily.semi_bold,
                                     color:"#000"
                                     }}
-                                btnName=" Log Out"
+                                btnName="Log Out"
                                 icon= {{
                                     name:'logout',
                                     type:'antdesign',
                                     color:Colors.color1
                                 }}
                                 />
-                                <Modal isVisible={Model} onDismiss={()=>setModal(!Model)} onBackdropPress={()=>setModal(!Model)}>
-                                    <View style={{flex:1}}>
-                                        <Text>
-                                            Elit in esse sint labore officia.
-                                        </Text>
-                                    </View>
-                                </Modal>
+                                <CustomModel 
+                                 open={Model} 
+                                 setopen={setModal} 
+                                 yes={{name:'Ok',onPress:()=>LogOut()}}
+                                 no={{name:'Cancel'}}
+                                 h1={"Are you sure you want to logout ?"}
+                                 />
                             </View>
                         </View>
                     </>

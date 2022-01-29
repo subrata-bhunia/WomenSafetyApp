@@ -22,7 +22,7 @@ const Button = ({btnName,btnStyle,onPress,textStyle,icon}) => {
                          color={icon.color}
                          size={24} />
                         <Text style={textStyle}>
-                            {btnName}
+                            {"  "}{btnName}
                         </Text>
                         </View>
                     )

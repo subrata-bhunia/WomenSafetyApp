@@ -13,8 +13,8 @@ const SafetyTips = () => {
     const [SafetyTips,setSafetyTips]=useState(null);
     // ------------- API FOR SAFETY TIPS ---------------- //
     const apiUrl=url+'/safety-tips'
-    const apiCall = () => {
-        axios({
+    const apiCall = async() => {
+        await axios({
             method:'GET',
             url:apiUrl
         }).then(res =>setSafetyTips(res?.data?.data))
