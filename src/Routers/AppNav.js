@@ -29,7 +29,7 @@ function HomeStackScreen(){
             <HomeStack.Screen name='SafetyTips' component={SafetyTips}/>
             <HomeStack.Screen name='SafeZone' component={SafeZone}/>
             <HomeStack.Screen name='Circles' component={Circles}/>
-            <HomeStack.Screen name='Login' component={AuthStack}/>
+            <HomeStack.Screen name='Login1' component={AuthStack}/>
             <HomeStack.Screen name='SafetyTipsDetails' component={SafetyDetails}/>
         </HomeStack.Navigator>
     )
