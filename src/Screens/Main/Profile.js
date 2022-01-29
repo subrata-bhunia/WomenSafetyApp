@@ -18,7 +18,8 @@ import { UIStore } from '../../UIStore';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BallIndicator } from 'react-native-indicators';
 import CustomLoader from '../../Components/CustomLoader';
-
+import CustomModel from '../../Components/CustomModel';
+import Modal from 'react-native-modal';
 const IconType = 'ionicon'
 // -------------------- //
 export const Top=()=>{
@@ -44,12 +45,12 @@ export const CustomHeader2=()=>{
     )
 }
 // -------------------- //
-const ProfilePic=({imgUrl})=>{
+const ProfilePic=({imgSource})=>{
     return(
         <View style={styles.ProfilePicView}>
             <ImageBackground
              style={styles.ProfilePic}
-             source={{uri:imgUrl}}
+             source={imgSource}
              imageStyle={styles.ProfilePic}
              >
                  <View style={styles.EDIT_PROFILEPIC}>
@@ -70,7 +71,7 @@ const ProfilePic=({imgUrl})=>{
 }
 // -------------------- //
 const CountSessions=({userDetail})=>{
-    console.log("userDetail/72",userDetail)
+    // console.log("userDetail/72",userDetail)
     return(
         <View>
             <Text style={{fontFamily:FontFamily.semi_bold,color:Colors.TextColor,textAlign:'center',fontSize:17}}>
@@ -123,6 +124,7 @@ const Profile1 =()=>{
     const userId= UIStore.useState(s=>s.userId);
     const url = UIStore.useState(s=>s.localUrl);
     const [userDetail,setuserDetail]=useState(null);
+    const [Model,setModal]=useState(false);
     const navigation =useNavigation();
     // ----------- USER DETAILS  ------------- //
     const apiUrl =url+'/users/'+userId;
@@ -131,7 +133,7 @@ const Profile1 =()=>{
             axios({
                 method: 'get',
                 url: apiUrl,
-              }).then(res=>setuserDetail(res.data.data))
+              }).then(res=>setuserDetail(res?.data?.data))
               .catch(err=>console.log("USERDETAILS",err))
         }
     }
@@ -159,7 +161,7 @@ const Profile1 =()=>{
                         <CustomHeader2 />
                         <View>
                             <Top />
-                            <ProfilePic imgUrl="https://i.pinimg.com/originals/73/16/f5/7316f550de9ca0045e3d8d98a5bb5e44.png" />
+                            <ProfilePic imgSource={userDetail?.photo ?{uri:userDetail?.photo }:require('../../../assets/logo/app_logo.png')} />
                         </View>
                         <View style={styles.SEC2}>
                             <CountSessions userDetail={userDetail}  />
@@ -179,7 +181,7 @@ const Profile1 =()=>{
                             </View>
                             <View>
                             <Button
-                                onPress={()=>LogOut()} 
+                                onPress={()=>setModal(!Model)} 
                                 btnStyle={{
                                     height: 50,
                                     width:SIZES.ScreenWidth*0.4, 
@@ -198,6 +200,13 @@ const Profile1 =()=>{
                                     color:Colors.color1
                                 }}
                                 />
+                                <Modal isVisible={Model} onDismiss={()=>setModal(!Model)} onBackdropPress={()=>setModal(!Model)}>
+                                    <View style={{flex:1}}>
+                                        <Text>
+                                            Elit in esse sint labore officia.
+                                        </Text>
+                                    </View>
+                                </Modal>
                             </View>
                         </View>
                     </>
@@ -275,13 +284,13 @@ const styles=StyleSheet.create({
         marginVertical:15
     },
     CARDVIEW1:{
-        height:SIZES.ScreenHeight/4,
+        height:SIZES.ScreenHeight/5,
         width:SIZES.ScreenWidth/2.6,
         margin:10,
         borderRadius:20
     },
     ImageView:{
-        height:SIZES.ScreenHeight/4,
+        height:SIZES.ScreenHeight/5,
         width:SIZES.ScreenWidth/2.6,
         borderRadius:20
     },

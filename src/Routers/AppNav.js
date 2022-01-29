@@ -25,7 +25,7 @@ function HomeStackScreen(){
         screenOptions={{
             headerShown:false
         }}>
-            <HomeStack.Screen name ='Homepage' component={Home} />
+            <HomeStack.Screen name ='Homepage' component={AppNav} />
             <HomeStack.Screen name='SafetyTips' component={SafetyTips}/>
             <HomeStack.Screen name='SafeZone' component={SafeZone}/>
             <HomeStack.Screen name='Circles' component={Circles}/>
@@ -60,24 +60,31 @@ const AppNav = () => {
                     : 'md-help-circle-outline';
                 }
 
-                return <Ionicons name={iconName} size={size} color={color} />;
+                return <Ionicons name={iconName} size={30} color={color} />;
              },
              tabBarActiveTintColor:Colors.color1,
              tabBarLabelStyle:{
                  fontFamily:FontFamily.semi_bold,
-                 fontSize:12
+                 fontSize:14
              },
-             headerShown:false
+             headerShown:false,
+             tabBarStyle:{
+                 borderRadius:20,
+                 backgroundColor:Colors.color3,
+                 width:'70%',
+                 alignSelf:'center',
+                 height:70
+             }
          })}
         >
-            <Tab.Screen name='Home' component={HomeStackScreen} />
-            <Tab.Screen name='Setting' component={Settings} />
+            <Tab.Screen name='Home' component={Home} />
+            {/* <Tab.Screen name='Setting' component={Settings} /> */}
             <Tab.Screen name='Profile' component={Profile} />
             <Tab.Screen name='Help' component={About} />
         </Tab.Navigator>
     )
 }
 
-export default AppNav
+export default HomeStackScreen
 
 const styles = StyleSheet.create({})
