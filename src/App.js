@@ -7,6 +7,7 @@ import AuthStack from "./Routers/AuthStack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import OnBoard from "./Routers/OnBoardStack";
 import AnimatedSplash from "react-native-animated-splash-screen";
+import HomeStackScreen from "./Routers/AppNav";
 
 const App = () =>{
   const [login,setLogin]=useState(false);
@@ -53,7 +54,7 @@ const App = () =>{
         // customComponent={<Text>Feel Save Anywhere and Everywhere</Text>}
       >
         {
-          onboard ? login ? <AppNav /> : <AuthStack /> : <OnBoard />
+          onboard ? login ? <HomeStackScreen /> : <AuthStack /> : <OnBoard />
         }
       </AnimatedSplash>
     </NavigationContainer>

@@ -40,7 +40,7 @@ const SafetyDetails = ({route}) => {
                     </Text>
               </View>
           </View>
-          {/*  */}
+          {/* des */}
           <View style={{marginVertical:20}}>
               <Text style={{fontFamily:FontFamily.default,color:Colors.TextColor}}>
                   {allDetails?.description}
