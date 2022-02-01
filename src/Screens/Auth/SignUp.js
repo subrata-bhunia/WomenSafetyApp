@@ -10,6 +10,7 @@ import { Icon } from 'react-native-elements';
 import Button from '../../Components/Button';
 import { UIStore } from '../../UIStore';
 import axios from 'axios';
+import { getMyFbUserInfo, loginWithFacebook, loginWithGoogle } from '../../api/social-login';
 const SignUp = () => {
     const {width}=useWindowDimensions();
     const navigation = useNavigation();
@@ -18,6 +19,36 @@ const SignUp = () => {
     const [vaild_aa,setVaildAadhar]=useState(null);
     const phoneInput = useRef(null);
     const url = UIStore.useState(s=>s.localUrl);
+    var [imgUrl,setimgUrl]=useState("");
+    var [edit,setedit]=useState(true)
+
+    // ---------------------- login with FACEBOOK ------------ //
+    const response =(e,res)=>{
+        if(!e){
+            setemail(res?.email)
+            setedit(res?.email ? false : true)
+        }
+    }
+    const FBlogin = () => {
+        loginWithFacebook()
+        .then(res=>{
+            setName(res?.user?.name);
+            setimgUrl(res?.user?.imageURL.replace(/100&/g,"500&"))
+            // console.log(res)
+            getMyFbUserInfo(res?.accessToken,response)
+        })
+        .catch(err => console.log("FBERROR",err))
+    }
+    const Googlelogin = () => {
+        loginWithGoogle()
+        .then(res=>{
+            setName(res?.user?.name);
+            setimgUrl(res?.user?.photo);
+            setemail(res?.user?.email);
+            setedit(res?.user?.email ? false : true)
+        })
+        .catch(err => console.log("FBERROR",err))
+    }
 
     // ---------------- AADHAR CARD CHECK ---------- //
     const handleCardNumber = (text) => {
@@ -42,23 +73,29 @@ const SignUp = () => {
     var [password,setpassword]=useState("");
 
     const signUpUser=()=>{
-        if(name.length < 2 || !vaild_aa || value.length < 10 || password < 6 ){
+
+        if(name.length < 2 || value.length < 10 || password < 6 ){
             alert(`🔸 Please Check Name \n🔸 Please Check Aadhar Number \n🔸 Please Check Mobile Number \n🔸 Please Check email \n🔸 Please Check Password [>6] \n`)
         }else{
             axios({
                 method: 'post',
                 url: apiUrl,
                 data:{
-                    name:name,
+                    full_name:name,
                     aadhar_card:aadhar_card,
                     phone:value,
                     email:email,
-                    password:password
+                    password:password,
+                    photo:imgUrl === "" ? null : imgUrl
                 }
               })
                 .then(function (response) {
                   msg(response.data)
-                }).catch(err => alert("Something went to worng !"));
+                }).catch(err => {
+                    if(err){
+                        signUpUser()
+                    }
+                });
         }
     }
     const msg =(response)=>{
@@ -75,10 +112,16 @@ const SignUp = () => {
             <View style={{flex:1.3}}>
             <View
               style={{flexDirection:'row',justifyContent:'flex-end',width:'100%',alignSelf:'center'}}>
-                <TouchableOpacity activeOpacity={0.4} style={{elevation:5, height:50,width:50,borderWidth:0,alignItems:'center',justifyContent:'center',borderRadius:10,backgroundColor:'#fff',margin:5}}>
+                <TouchableOpacity 
+                activeOpacity={0.4} 
+                onPress={()=>Googlelogin()}
+                style={{elevation:5, height:50,width:50,borderWidth:0,alignItems:'center',justifyContent:'center',borderRadius:10,backgroundColor:'#fff',margin:5}}>
                     <Image style={{height:30,width:30,resizeMode:'contain'}} source={require('../../../assets/images/logos/google.png')} />
                 </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.4} style={{elevation:5,height:50,width:50,borderWidth:0,alignItems:'center',justifyContent:'center',borderRadius:10,backgroundColor:"#fff",margin:5}}>
+                <TouchableOpacity
+                 activeOpacity={0.4}
+                 onPress={()=>FBlogin()} 
+                 style={{elevation:5,height:50,width:50,borderWidth:0,alignItems:'center',justifyContent:'center',borderRadius:10,backgroundColor:"#fff",margin:5}}>
                     <Image style={{height:30,width:30,resizeMode:'contain'}} source={require('../../../assets/images/logos/facebook.png')} />
                 </TouchableOpacity>
             </View>
@@ -156,6 +199,7 @@ const SignUp = () => {
                 type='email-address' 
                 style={[styles.input,{width:width*0.9}]} 
                 value={email}
+                editable={edit}
                 onChangeText={(text) => {
                     setemail(text);
                   }}

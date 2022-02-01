@@ -52,6 +52,7 @@ const ProfilePic=({imgSource})=>{
              style={styles.ProfilePic}
              source={imgSource}
              imageStyle={styles.ProfilePic}
+             progressiveRenderingEnabled
              >
                  <View style={styles.EDIT_PROFILEPIC}>
                     <TouchableOpacity style={styles.EDIT_PROFILEPIC} activeOpacity={0.5}>
@@ -123,11 +124,7 @@ const CardView=({item,index})=>{
 const Profile1 =()=>{
     const userId= UIStore.useState(s=>s.userId);
     const url = UIStore.useState(s=>s.localUrl);
-    const [userDetail,setuserDetail]=useState({
-        photo:"https://source.unsplash.com/random/?girl",
-        full_name:'Purbita Patra',
-        email:"purbita@womansafetyapp.com"
-    });
+    const [userDetail,setuserDetail]=useState(null);
     const [Model,setModal]=useState(false);
     const navigation =useNavigation();
     // ----------- USER DETAILS  ------------- //
@@ -138,7 +135,11 @@ const Profile1 =()=>{
                 method: 'get',
                 url: apiUrl,
               }).then(res=>setuserDetail(res?.data?.data))
-              .catch(err=>console.log("USERDETAILS",err))
+              .catch(err=>{
+                  if(err){
+                      userDetails()
+                  }
+              })
         }
     }
     // --------------------- LOG OUT ------------- //
@@ -156,8 +157,9 @@ const Profile1 =()=>{
         }
     }
     useEffect(()=>{
-        // userDetails();
+        userDetails();
     },[])
+    console.log(userDetail)
     return(
         <View style={styles.Main}>
             {
@@ -166,7 +168,7 @@ const Profile1 =()=>{
                         <CustomHeader2 />
                         <View>
                             <Top />
-                            <ProfilePic imgSource={userDetail?.photo ?{uri:userDetail?.photo }:require('../../../assets/logo/app_logo.png')} />
+                            <ProfilePic imgSource={userDetail?.photo ?{uri:`${userDetail?.photo}`}:require('../../../assets/logo/app_logo.png')} />
                         </View>
                         <View style={styles.SEC2}>
                             <CountSessions userDetail={userDetail}  />

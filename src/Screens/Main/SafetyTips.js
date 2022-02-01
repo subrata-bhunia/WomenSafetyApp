@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import Moment from 'react-moment';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Card, Image } from 'react-native-elements'
+import { getSafetyTips } from '../../api/safety-tips';
 import CustomLoader from '../../Components/CustomLoader'
 import Header from '../../Components/Header'
 import { Colors, FontFamily } from '../../Constants/constants';
@@ -14,10 +15,8 @@ const SafetyTips = () => {
     // ------------- API FOR SAFETY TIPS ---------------- //
     const apiUrl=url+'/safety-tips'
     const apiCall = async() => {
-        await axios({
-            method:'GET',
-            url:apiUrl
-        }).then(res =>setSafetyTips(res?.data?.data))
+        await getSafetyTips()
+        .then(res =>setSafetyTips(res?.data?.data))
         .catch(err=>{
             console.log("errSafety",err)
         })
