@@ -7,7 +7,6 @@ import SafetyTips from '../Screens/Main/SafetyTips';
 import SafeZone from '../Screens/Main/SafeZone';
 import Circles from '../Screens/Main/Circles';
 import Home from '../Screens/Main/Home';
-import AuthStack from './AuthStack';
 import SafetyDetails from '../Screens/Main/SafetyDetails';
 // -----------TAB---------------- //
 import Settings from '../Screens/Main/Settings';
@@ -15,6 +14,7 @@ import Profile from '../Screens/Main/Profile';
 import About from '../Screens/Main/About';
 import { Colors, FontFamily } from '../Constants/constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Contacts from '../Screens/Main/Contacts';
 
 const HomeStack =createNativeStackNavigator();
 
@@ -29,8 +29,9 @@ function HomeStackScreen(){
             <HomeStack.Screen name='SafetyTips' component={SafetyTips}/>
             <HomeStack.Screen name='SafeZone' component={SafeZone}/>
             <HomeStack.Screen name='Circles' component={Circles}/>
-            <HomeStack.Screen name='Login1' component={AuthStack}/>
             <HomeStack.Screen name='SafetyTipsDetails' component={SafetyDetails}/>
+            <HomeStack.Screen name='Setting' component={Settings} />
+            <HomeStack.Screen name='Contacts' component={Contacts} />
         </HomeStack.Navigator>
     )
 }
@@ -38,7 +39,7 @@ function HomeStackScreen(){
 const Tab = createBottomTabNavigator();
 const AppNav = () => {
     return (
-        <Tab.Navigator initialRouteName='Home'
+        <Tab.Navigator
          screenOptions={({route})=>({
              tabBarIcon:({ focused, color, size }) => {
                 let iconName;
@@ -73,8 +74,10 @@ const AppNav = () => {
                  backgroundColor:Colors.color3,
                  width:'70%',
                  alignSelf:'center',
-                 height:70
-             }
+                 height:60,
+                 marginBottom:10
+             },
+             
          })}
         >
             <Tab.Screen name='Home' component={Home} />

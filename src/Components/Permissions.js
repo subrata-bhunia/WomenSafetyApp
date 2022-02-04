@@ -34,6 +34,7 @@ const Permissions = () => {
                 PermissionsAndroid.requestMultiple([
                     PermissionsAndroid.PERMISSIONS.CAMERA, 
                     PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
+                    PermissionsAndroid.PERMISSIONS.WRITE_CONTACTS,
                     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
                     PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
                     PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
@@ -52,6 +53,7 @@ const Permissions = () => {
                     if (result['android.permission.ACCESS_COARSE_LOCATION']
                     && result['android.permission.CAMERA']
                     && result['android.permission.READ_CONTACTS']
+                    && result['android.permission.WRITE_CONTACTS']
                     && result['android.permission.READ_CALENDAR']
                     && result['android.permission.BLUETOOTH_CONNECT']
                     && result['android.permission.READ_SMS']
@@ -97,16 +99,13 @@ const Permissions = () => {
         } else {
             ToastAndroid.show("Deny Permissions",ToastAndroid.SHORT,ToastAndroid.CENTER)
         }
-        // if(status_P){
-        //     Contacts.getAll().then((contact)=>{console.log(contact[0])});
-        //     CallLogs.loadAll().then((c)=>console.log(c))
-        // }
+        
     }
     console.log(status_P);
     return (
         <View style={styles.container}>
                 <TouchableOpacity style={{marginTop:20}} onPress={()=>Deny()}>
-                    <Text style={{textAlign:'right',textDecorationStyle:'dotted',textDecorationLine:'underline',fontFamily:FontFamily.semi_bold,padding:20}}>Deny Permissions</Text>
+                    <Text style={{textAlign:'right',textDecorationStyle:'dotted',textDecorationLine:'underline',fontFamily:FontFamily.semi_bold,padding:20,color:Colors.TextColor}}>Deny Permissions</Text>
                 </TouchableOpacity>
                 <ScrollView stickyHeaderIndices={[0]} contentContainerStyle={{marginTop:0,padding:40}}>
                     <View>
@@ -116,7 +115,7 @@ const Permissions = () => {
                     </View>
                         {/* Contacts */}
                         <View style={{padding:20,paddingBottom:0}}>
-                            <Text style={{fontFamily:FontFamily.semi_bold,fontSize:20}}>
+                            <Text style={{fontFamily:FontFamily.semi_bold,fontSize:20,color:Colors.TextColor}}>
                                 <Icon type="material-community" name="account-multiple" />
                                 {" "}Contacts
                             </Text>
@@ -137,7 +136,7 @@ const Permissions = () => {
                         </View>
                         {/* Camera & Files */}
                         <View style={{paddingHorizontal:20}}>
-                            <Text style={{fontFamily:FontFamily.semi_bold,fontSize:20}}>
+                            <Text style={{fontFamily:FontFamily.semi_bold,fontSize:20,color:Colors.TextColor}}>
                                 <Icon type="font-awesome-5" name="camera" />
                                 {" "}Camera
                             </Text>
@@ -158,7 +157,7 @@ const Permissions = () => {
                         </View>
                         {/* SMS */}
                         <View style={{paddingHorizontal:20}}>
-                            <Text style={{fontFamily:FontFamily.semi_bold,fontSize:20}}>
+                            <Text style={{fontFamily:FontFamily.semi_bold,fontSize:20,color:Colors.TextColor}}>
                                 <Icon type="font-awesome-5" name="sms" />
                                 {" "}SMS
                             </Text>
@@ -179,7 +178,7 @@ const Permissions = () => {
                         </View>
                         {/* Location */}
                         <View style={{paddingHorizontal:20}}>
-                            <Text style={{fontFamily:FontFamily.semi_bold,fontSize:20}}>
+                            <Text style={{fontFamily:FontFamily.semi_bold,fontSize:20,color:Colors.TextColor}}>
                                 <Icon type="font-awesome-5" name="location-arrow" />
                                 {" "}Location
                             </Text>
@@ -234,7 +233,8 @@ const styles = StyleSheet.create({
     },
     Text:{
         fontFamily:FontFamily.default,
-        paddingLeft:7
+        paddingLeft:7,
+        color:Colors.TextColor
     },
     View2:{
         flexDirection:'row',

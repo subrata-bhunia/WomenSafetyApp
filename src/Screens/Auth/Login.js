@@ -1,14 +1,16 @@
-import React, { useState } from 'react'
-import { StyleSheet, Text, View, useWindowDimensions, Image, TouchableOpacity, StatusBar} from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { StyleSheet, Text, View, useWindowDimensions, Image, TouchableOpacity, StatusBar, Alert, BackHandler} from 'react-native'
 import {Input} from 'galio-framework';
 import { Colors, FontFamily, Sizes } from '../../Constants/constants';
 import { NeuButton } from 'neumorphism-ui';
 import { useNavigation } from '@react-navigation/core';
+import { useRoute } from '@react-navigation/native';
 import Button from '../../Components/Button';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UIStore } from '../../UIStore';
 import axios from 'axios';
 import jwt_decode from "jwt-decode";
+import { AuthContext } from '../../Components/context';
 
 const Login = () => {
     const {width}=useWindowDimensions();
@@ -16,7 +18,7 @@ const Login = () => {
     const [email,setemail]=useState("");
     const [password,setpassword]=useState("");
     const url = UIStore.useState(s=>s.localUrl);
-
+    const {signIn}=React.useContext(AuthContext)
     // ------------------ LOGIN API ------------ //
     const apiUrl=url+'/users/login';
     const SignIn = ()=>{
@@ -54,16 +56,25 @@ const Login = () => {
                                 console.log(err)
                             }
                         }
-                        console.log("user_data",`${userId}`)
+                        // console.log("user_data",`${userId}`)
                     }catch(err){
-                        console.log('@login/LoginPage',err);
+                        if(err){
+                            console.log("Login/60",err)
+                        }
                     }
                   }
-                }).catch(err =>console.log(err));
+                }).catch(err =>{
+                    if(err){
+                        SignIn()
+                    }
+                });
         }
         
     }
-    console.log(UIStore.useState(s=>s.user_token))
+    // console.log(UIStore.useState(s=>s.user_token))
+    const route = useRoute();
+    console.log(route)
+
     return (
         <View style={[styles.container,{width}]}>
             <StatusBar translucent backgroundColor={"transparent"} barStyle='dark-content' />
@@ -76,6 +87,7 @@ const Login = () => {
                  style={[styles.input,{width:width*0.9}]} 
                  value={email}
                  onChangeText={text=>setemail(text)}
+                 placeholderTextColor="#999"
                  />
                 <Input
                  placeholder="Enter your Password" 
@@ -87,10 +99,11 @@ const Login = () => {
                  iconColor="#999"
                  value={password}
                  onChangeText={text=>setpassword(text)}
+                 placeholderTextColor="#999"
                  />
                 <View style={{alignItems:"center",alignSelf:"center",marginTop:10}}>
                     <Button
-                     onPress={()=>SignIn()} 
+                     onPress={()=>signIn(email,password)} 
                      btnStyle={{
                          height: 55,
                          width:Sizes.ScreenWidth*0.5, 
@@ -104,10 +117,10 @@ const Login = () => {
                      btnName="Sign in now"
                     />
                     <TouchableOpacity style={{}} onPress={()=>console.log('Forget Pass')}>
-                        <Text style={{textAlign:'center',textDecorationStyle:'dotted',textDecorationLine:'underline',fontFamily:FontFamily.semi_bold,padding:20}}>Forget Password ?</Text>
+                        <Text style={{textAlign:'center',textDecorationStyle:'dotted',textDecorationLine:'underline',fontFamily:FontFamily.semi_bold,padding:20,color:Colors.TextColor}}>Forget Password ?</Text>
                     </TouchableOpacity>
                     <View style={{marginTop:-10}}>
-                        <Text style={{textAlign:'center',fontFamily:FontFamily.semi_bold,padding:20}}>Don't have account ?</Text>
+                        <Text style={{textAlign:'center',fontFamily:FontFamily.semi_bold,padding:20,color:Colors.TextColor}}>Don't have account ?</Text>
                         <View style={{}}>
                         <Button
                      onPress={()=>navigation.navigate('SignUp')} 

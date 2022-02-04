@@ -19,7 +19,7 @@ const Button = ({btnName,btnStyle,onPress,textStyle,icon}) => {
                         <Icon
                          name={icon.name} 
                          type={icon.type} 
-                         color={icon.color}
+                         color={icon?.color ? icon?.color :"#000"}
                          size={24} />
                         <Text style={textStyle}>
                             {"  "}{btnName}

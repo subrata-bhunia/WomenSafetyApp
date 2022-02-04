@@ -20,6 +20,8 @@ target 'WomenSafety' do
 
   pod 'react-native-fbsdk', :path => '../node_modules/react-native-fbsdk'
 
+  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
+
   target 'WomenSafetyTests' do
     inherit! :complete
     # Pods for testing

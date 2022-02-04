@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import {name,version} from '../../../package.json'
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import {
@@ -7,12 +8,15 @@ import {
     View,
     TouchableOpacity,
     ImageBackground,
-    FlatList
+    FlatList,
+    ScrollView,
+    Image,
+    LogBox
   } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { Card } from 'react-native-paper';
 import Button from '../../Components/Button';
-import { Colors, FontFamily, Sizes as SIZES } from '../../Constants/constants';
+import { Colors, FontFamily, Sizes, Sizes as SIZES } from '../../Constants/constants';
 import dummyData from '../../Data/dummy.data';
 import { UIStore } from '../../UIStore';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -20,53 +24,66 @@ import { BallIndicator } from 'react-native-indicators';
 import CustomLoader from '../../Components/CustomLoader';
 import CustomModel from '../../Components/CustomModel';
 import Modal from 'react-native-modal';
-const IconType = 'ionicon'
+import LinearGradient from 'react-native-linear-gradient';
+const IconType = 'ionicon';
+import { AuthContext } from '../../Components/context';
+const menuItem=[
+    {
+        iconName:"phone",
+        iconType:"antdesign",
+        navigate:"Contacts",
+        menuName:'Contacts',
+        iconColor:"#090"
+    },
+    
+    {
+        iconName:"notification",
+        iconType:"antdesign",
+        navigate:"Setting",
+        menuName:'Notifications',
+        iconColor:Colors.color1
+    },
+    {
+        iconName:"document-text-outline",
+        iconType:"ionicon",
+        navigate:"Setting",
+        menuName:'Documents',
+        iconColor:Colors.color2
+    },
+    {
+        iconName:"ios-settings-outline",
+        iconType:"ionicon",
+        navigate:"Setting",
+        menuName:'Settings',
+        iconColor:"#31ebe8"
+    },
+    {
+        iconName:"logout",
+        iconType:"antdesign",
+        navigate:null,
+        menuName:'Log Out',
+        onPress : ()=>setModal(true),
+        iconColor:"red"
+    },
+    
+]
+
 // -------------------- //
 export const Top=()=>{
     return(
-        <View style={styles.TOP_VIEW} />
-    )
-}
-// ---------------------- //
-export const CustomHeader2=()=>{
-    return(
-        <View style={styles.Header}>
-            <TouchableOpacity style={{padding:5,marginLeft:10}}>
-                <Icon
-                 name="edit"
-                 type="feather"
-                 size={SIZES.iconSize-15}
-                 color={Colors.color1}
-                 raised
-                 reverseColor={Colors.color1}
-                 />
-            </TouchableOpacity>
-        </View>
+        // <View>
+        <LinearGradient colors={[Colors.color2,Colors.color3]} style={styles.TOP_VIEW} />
     )
 }
 // -------------------- //
 const ProfilePic=({imgSource})=>{
     return(
         <View style={styles.ProfilePicView}>
-            <ImageBackground
+            <Image
              style={styles.ProfilePic}
              source={imgSource}
-             imageStyle={styles.ProfilePic}
-             progressiveRenderingEnabled
-             >
-                 <View style={styles.EDIT_PROFILEPIC}>
-                    <TouchableOpacity style={styles.EDIT_PROFILEPIC} activeOpacity={0.5}>
-                    <Icon
-                    name="camera-outline"
-                    type={IconType}
-                    size={15}
-                    reverse
-                    color="#eee"
-                    reverseColor={Colors.TextColor}
-                    />
-                    </TouchableOpacity>
-                 </View>
-            </ImageBackground>
+             defaultSource={require('../../../assets/logo/logo.png')}
+             />
         </View>
     )
 }
@@ -74,13 +91,28 @@ const ProfilePic=({imgSource})=>{
 const CountSessions=({userDetail})=>{
     // console.log("userDetail/72",userDetail)
     return(
-        <View>
-            <Text style={{fontFamily:FontFamily.semi_bold,color:Colors.TextColor,textAlign:'center',fontSize:17}}>
-                {userDetail !== null ? userDetail.full_name : ""}
+        <View style={styles.userDetail}>
+            <Text
+             style={{
+                 fontFamily:FontFamily.semi_bold,
+                 color:Colors.TextColor,
+                 fontSize:17
+                 }}>
+                {userDetail !== null ? userDetail?.full_name : ""}
             </Text>
-            <Text style={{fontFamily:FontFamily.default,color:Colors.TextColor,textAlign:'center',fontSize:14}}>
-            {userDetail !== null ? userDetail.email : ""}
+            <Text style={{fontFamily:FontFamily.default,color:Colors.TextColor,fontSize:14,marginTop:5}}>
+            {userDetail !== null ? userDetail?.email : ""}
             </Text>
+            <Text style={{fontFamily:FontFamily.default,color:Colors.TextColor,fontSize:14,marginTop:5}}>
+            {userDetail !== null ? userDetail?.phone : ""}
+            </Text>
+            {
+                userDetail?.verified === 0 ? (
+                <Image style={{height:50,width:50,position:'absolute',top:0,right:20}} source={require('../../../assets/images/icons/inactive_aadhar.png')} />
+                ) : (
+                    <Image style={{height:50,width:50,position:'absolute',top:0,right:20}} source={require('../../../assets/images/icons/aadhaar.png')} />
+                )
+            }
         </View>
     )
 }
@@ -127,6 +159,8 @@ const Profile1 =()=>{
     const [userDetail,setuserDetail]=useState(null);
     const [Model,setModal]=useState(false);
     const navigation =useNavigation();
+    
+const {signOut} = React.useContext(AuthContext);
     // ----------- USER DETAILS  ------------- //
     const apiUrl =url+'/users/'+userId;
     const userDetails=async()=>{
@@ -143,80 +177,73 @@ const Profile1 =()=>{
         }
     }
     // --------------------- LOG OUT ------------- //
-    const LogOut = async() =>{
-        try{
-            await AsyncStorage.removeItem('@login');
-            await AsyncStorage.removeItem('@userId');
-            const val = await AsyncStorage.getItem('@login');
-            if(val === null){
-                navigation.navigate("Login1");
-                setModal(false)
-            }
-        }catch(err){
-            console.log("ERROR/PROFILE/142",err);
-        }
-    }
     useEffect(()=>{
         userDetails();
+        // LogBox.ignoreAllLogs()
+        LogBox.ignoreLogs(["EventEmitter.removeListener","VirtualizedLists should never be nested"]);
     },[])
-    console.log(userDetail)
+    // console.log(userDetail)
+    const Menu =({item})=>{
+        return(
+            <TouchableOpacity onPress={()=>item?.navigate ? navigation.navigate(`${item.navigate}`) : setModal(true)}>
+                <View style={{flexDirection:'row',alignItems:'center',padding:5,marginVertical:5}}>
+                    <Icon name={item?.iconName} type={item?.iconType} color={item?.iconColor} size={20} reverse/>
+                    <Text style={{fontFamily:FontFamily.semi_bold,marginLeft:10,color:Colors.TextColor}}>
+                        {item?.menuName}
+                    </Text>
+                </View>
+            </TouchableOpacity>
+        )
+    }
     return(
         <View style={styles.Main}>
             {
                 userDetail === null ? <CustomLoader loaderStyle={{height:100,width:100}} /> :(
-                    <>
-                        <CustomHeader2 />
+                    <ScrollView nestedScrollEnabled={true}>
                         <View>
                             <Top />
-                            <ProfilePic imgSource={userDetail?.photo ?{uri:`${userDetail?.photo}`}:require('../../../assets/logo/app_logo.png')} />
+                            <ProfilePic 
+                            imgSource={userDetail?.photo ?{uri:`${userDetail?.photo}`}:require('../../../assets/logo/app_logo.png')} />
+                            <CountSessions userDetail={userDetail}  />
                         </View>
                         <View style={styles.SEC2}>
-                            <CountSessions userDetail={userDetail}  />
-                            <View style={styles.COMPLETEVIEW}>
-                                <Text style={[styles.COMPLETETEXT,{fontFamily:FontFamily.semi_bold}]}>
-                                    Unsecure Places
-                                </Text>
-                            </View>
-                            <View>
+                            {
+                                userDetail?.verified === 0 ? (
+                                    <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
+                                        <Icon name="ios-warning-outline" type="ionicon" color={Colors.color1} size={20} />
+                                        <Text style={{fontFamily:FontFamily.default,marginLeft:5,color:Colors.TextColor}}>
+                                            Please verify your account within 10 days. Otherwise we are disable your account.
+                                        </Text>
+                                    </View>
+                                ) : null
+                            }
+                            <View style={{marginTop:userDetail?.verified === 0 ? 10 : 0}}>
                                 <FlatList
-                                renderItem={CardView}
-                                data={dummyData}
-                                horizontal
-                                showsHorizontalScrollIndicator={false}
-                                keyExtractor={(index)=>index.navigate}
-                                />
+                                 data={menuItem}
+                                 renderItem={Menu}
+                                 scrollEnabled={false}
+                                 ListFooterComponent={()=>(
+                                     <View style={{alignItems:'center',marginTop:30,opacity:0.6}}>
+                                         <Text style={{fontFamily:FontFamily.semi_bold,opacity:0.6,color:Colors.TextColor}}>{version.indexOf(0)===0 ? `${version}-beta` : version }</Text>
+                                         <View style={{alignItems:'center'}}>
+                                             <Text style={{fontFamily:FontFamily.semi_bold,opacity:0.6,color:Colors.TextColor}}>
+                                                 Powered by
+                                             </Text>
+                                             <Image source={require('../../../assets/logo/logo.png')} style={{height:30,width:30,resizeMode:'center',opacity:0.6}} />
+                                         </View>
+                                     </View>
+                                 )}
+                                 />
                             </View>
-                            <View>
-                            <Button
-                                onPress={()=>setModal(!Model)} 
-                                btnStyle={{
-                                    height: 50,
-                                    width:SIZES.ScreenWidth*0.4, 
-                                    borderRadius: 50,
-                                    backgroundColor:Colors.color5,
-                                    marginTop:10
-                                    }} 
-                                textStyle={{
-                                    fontFamily:FontFamily.semi_bold,
-                                    color:"#000"
-                                    }}
-                                btnName="Log Out"
-                                icon= {{
-                                    name:'logout',
-                                    type:'antdesign',
-                                    color:Colors.color1
-                                }}
-                                />
-                                <CustomModel 
+                            <CustomModel 
                                  open={Model} 
                                  setopen={setModal} 
-                                 yes={{name:'Ok',onPress:()=>LogOut()}}
+                                 yes={{name:'Ok',onPress:()=>signOut()}}
                                  no={{name:'Cancel'}}
                                  h1={"Are you sure you want to logout ?"}
                                  />
-                            </View>
                         </View>
-                    </>
+                    </ScrollView>
                 )
             }
             
@@ -236,30 +263,40 @@ const styles=StyleSheet.create({
         width:"98%",
     },
     TOP_VIEW:{
-        backgroundColor:Colors.color3,
-        height:SIZES.ScreenHeight/6,
-        transform:[{skewY:"-12deg"}],
-        width:SIZES.ScreenWidth+100,
-        marginTop:40,
-        marginStart:-30
+        height:SIZES.ScreenHeight/2,
+        transform:[{skewY:"-20deg"}],
+        width:SIZES.ScreenWidth,
+        marginTop:-SIZES.ScreenHeight/6,
+        marginStart:0,
+        borderBottomLeftRadius:SIZES.ScreenHeight/5,
+        elevation:5
     },
     ProfilePic:{
         height:100,
         width:100,
-        borderRadius:30
+        borderRadius:50,
+        elevation:5
     },
     EDIT_PROFILEPIC:{
         position:"absolute",
         right:-10
     },
     ProfilePicView:{
-        position:"absolute",
-        alignSelf:"center",
-        top:100
+        marginTop:-100,
+        alignSelf:"flex-end",
+        marginEnd:20
     },
     SEC2:{
         paddingHorizontal:30,
-        marginTop:SIZES.ScreenHeight/13
+        marginTop:SIZES.ScreenHeight/5,
+        // backgroundColor:Colors.color4,
+        // height:SIZES.ScreenHeight
+        width:SIZES.ScreenWidth*0.98,
+        alignSelf:'center',
+        borderRadius:20,
+        // elevation:5,
+        marginVertical:20,
+        padding:10
     },
     COUNTVIEW:{
         flexDirection:"row",
@@ -311,6 +348,11 @@ const styles=StyleSheet.create({
         position:"absolute",
         bottom:5,
         right:30,
+    },
+    userDetail:{
+        marginTop:-Sizes.ScreenHeight/4,
+        elevation:5,
+        paddingHorizontal:40
     }
 
 })
