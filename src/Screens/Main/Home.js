@@ -82,7 +82,7 @@ const Home = () => {
         
         //   --------------
           checkUserId();
-        
+        // ------------
     },[])
 // ------------------------------------------- //
     const navigation = useNavigation();
@@ -350,7 +350,7 @@ const Home = () => {
                 <View>
                     <TouchableOpacity
                     //  onPress={()=>AsyncStorage.clear((err)=>console.log("Error Clear",err))} 
-                     onPress={()=>clearAscynStorage()} 
+                     onPress={()=>console.warn("SOS")} 
                      style={{
                          height: 150,
                          width:150, 

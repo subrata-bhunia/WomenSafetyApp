@@ -73,7 +73,6 @@ const SignUp = () => {
     var [password,setpassword]=useState("");
 
     const signUpUser=()=>{
-
         if(name.length < 2 || value.length < 10 || password < 6 ){
             alert(`🔸 Please Check Name \n🔸 Please Check Aadhar Number \n🔸 Please Check Mobile Number \n🔸 Please Check email \n🔸 Please Check Password [>6] \n`)
         }else{
@@ -86,21 +85,23 @@ const SignUp = () => {
                     phone:value,
                     email:email,
                     password:password,
-                    photo:imgUrl === "" ? null : imgUrl
+                    photo:imgUrl === "" ? null : imgUrl,
+                    verified:vaild_aa ? true : false
                 }
               })
                 .then(function (response) {
                   msg(response.data)
                 }).catch(err => {
                     if(err){
-                        signUpUser()
+                        signUpUser();
+                        console.log(err);
                     }
                 });
         }
     }
-    const msg =(response)=>{
+     const msg =(response)=>{
         navigation.goBack();
-        ToastAndroid.show(response.message,ToastAndroid.SHORT,ToastAndroid.CENTER)
+        ToastAndroid.show(response?.message,ToastAndroid.SHORT,ToastAndroid.CENTER)
     }
     return (
         <View style={[styles.container]}>
@@ -136,6 +137,7 @@ const SignUp = () => {
                 onChangeText={(text) => {
                     setName(text);
                   }}
+                  placeholderTextColor="#999"
                 />
            <Input
                 placeholder="Enter your 12 digit Aadhar Card Number" 
@@ -149,6 +151,7 @@ const SignUp = () => {
                 family="font-awesome"
                 right
                 iconColor= {vaild_aa === false ? 'red' : vaild_aa === true ? '#42ba96' : 'grey'}
+                placeholderTextColor="#999"
                 />
             <PhoneInput
                 ref={phoneInput}
@@ -186,12 +189,11 @@ const SignUp = () => {
                     fontFamily:FontFamily.semi_bold,
                     height:Sizes.ScreenHeight/35
                 }}
-                // disableArrowIcon
-                withDarkTheme
                 textInputProps={{
                     maxLength:10,
                     
                 }}
+                placeholderTextColor="#999"
                 />
            <Input
                 placeholder="Enter your email address" 
@@ -200,6 +202,7 @@ const SignUp = () => {
                 style={[styles.input,{width:width*0.9}]} 
                 value={email}
                 editable={edit}
+                placeholderTextColor="#999"
                 onChangeText={(text) => {
                     setemail(text);
                   }}
@@ -213,6 +216,7 @@ const SignUp = () => {
                  style={[styles.input,{width:width*0.9}]}
                  iconColor="#999"
                  value={password}
+                 placeholderTextColor="#999"
                 onChangeText={(text) => {
                     setpassword(text);
                   }}

@@ -14,10 +14,10 @@ import { useNavigation } from '@react-navigation/core';
 const Header = ({backBtn,notiBtn,searchBtn,name,imgBack,backColor,headerHeight,backImgSource}) =>{
     const navigation=useNavigation();
     const [state,setState]=useState({
-        backBtn: false || backBtn,
-        notiBtn: false || notiBtn,
-        searchBtn : false || searchBtn,
-        imgBack: false || imgBack,
+        backBtn: backBtn || false,
+        notiBtn: notiBtn || false,
+        searchBtn : searchBtn || false,
+        imgBack: imgBack || false,
         name : " " || name,
         backColor : Colors.orange || backColor ,
         headerHeight : headerHeight || 70 ,

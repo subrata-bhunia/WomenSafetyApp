@@ -13,12 +13,13 @@ const SafetyTips = () => {
     const url = UIStore.useState(s=> s.localUrl);
     const [SafetyTips,setSafetyTips]=useState(null);
     // ------------- API FOR SAFETY TIPS ---------------- //
-    const apiUrl=url+'/safety-tips'
     const apiCall = async() => {
         await getSafetyTips()
         .then(res =>setSafetyTips(res?.data?.data))
         .catch(err=>{
-            console.log("errSafety",err)
+            if(err){
+                apiCall()
+            }
         })
     }
     useEffect(()=>{
