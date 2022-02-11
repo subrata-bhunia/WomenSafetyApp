@@ -171,7 +171,8 @@ const {signOut} = React.useContext(AuthContext);
               }).then(res=>setuserDetail(res?.data?.data))
               .catch(err=>{
                   if(err){
-                      userDetails()
+                      console.log(err)
+                      userDetails();
                   }
               })
         }
@@ -182,7 +183,7 @@ const {signOut} = React.useContext(AuthContext);
         // LogBox.ignoreAllLogs()
         LogBox.ignoreLogs(["EventEmitter.removeListener","VirtualizedLists should never be nested"]);
     },[])
-    // console.log(userDetail)
+    console.log(userDetail)
     const Menu =({item})=>{
         return(
             <TouchableOpacity onPress={()=>item?.navigate ? navigation.navigate(`${item.navigate}`) : setModal(true)}>
@@ -266,7 +267,7 @@ const styles=StyleSheet.create({
         height:SIZES.ScreenHeight/2,
         transform:[{skewY:"-20deg"}],
         width:SIZES.ScreenWidth,
-        marginTop:-SIZES.ScreenHeight/6,
+        marginTop:-SIZES.ScreenHeight/5,
         marginStart:0,
         borderBottomLeftRadius:SIZES.ScreenHeight/5,
         elevation:5

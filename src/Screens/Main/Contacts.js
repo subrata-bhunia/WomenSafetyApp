@@ -58,8 +58,11 @@ const ContactList = () => {
         "Content-Type":"application/json"
         }
    }).then(res=>{
-     console.log(res.data);
-   }).catch(err=>console.log(err))
+     alert("SMS SEND")
+   }).catch(err=>{
+       console.log(err)
+       alert("SMS NOT SEND")
+    })
  }
  useEffect(() => {
      if (Platform.OS === 'android') {

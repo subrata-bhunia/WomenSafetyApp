@@ -93,7 +93,8 @@ const SignUp = () => {
                   msg(response.data)
                 }).catch(err => {
                     if(err){
-                        signUpUser()
+                        signUpUser();
+                        console.log(err);
                     }
                 });
         }

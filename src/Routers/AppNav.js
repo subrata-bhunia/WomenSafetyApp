@@ -15,6 +15,7 @@ import About from '../Screens/Main/About';
 import { Colors, FontFamily } from '../Constants/constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Contacts from '../Screens/Main/Contacts';
+import About1 from '../Screens/Main/About1';
 
 const HomeStack =createNativeStackNavigator();
 
@@ -32,6 +33,7 @@ function HomeStackScreen(){
             <HomeStack.Screen name='SafetyTipsDetails' component={SafetyDetails}/>
             <HomeStack.Screen name='Setting' component={Settings} />
             <HomeStack.Screen name='Contacts' component={Contacts} />
+            <HomeStack.Screen name='About1' component={About1} />
         </HomeStack.Navigator>
     )
 }
