@@ -2,6 +2,10 @@ apply plugin: "com.android.application"
 
 import com.android.build.OutputFile
 
+// MYAPP_UPLOAD_STORE_FILE=my-upload-key.keystore
+// MYAPP_UPLOAD_KEY_ALIAS=my-key-alias
+// MYAPP_UPLOAD_STORE_PASSWORD=123456
+// MYAPP_UPLOAD_KEY_PASSWORD=123456
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
  * and bundleReleaseJsAndAssets).
@@ -96,7 +100,7 @@ def enableSeparateBuildPerCPUArchitecture = false
 /**
  * Run Proguard to shrink the Java bytecode in release builds.
  */
-def enableProguardInReleaseBuilds = false
+def enableProguardInReleaseBuilds = true
 
 /**
  * The preferred build flavor of JavaScriptCore.
@@ -152,6 +156,12 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            storeFile file('my-upload-key.keystore')
+            storePassword '123456'
+            keyAlias 'my-key-alias'
+            keyPassword '123456'
+        }
     }
     buildTypes {
         debug {
@@ -165,7 +175,7 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
