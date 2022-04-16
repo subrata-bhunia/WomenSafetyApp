@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Women Safety App</string>
     <string name="facebook_app_id">657288435392622</string>
+    <string name="appwidget_text">Woman Safety App</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
 </resources>

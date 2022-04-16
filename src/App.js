@@ -13,7 +13,18 @@ import {AuthContext} from './Components/context';
 import jwt_decode from 'jwt-decode';
 import {SignIn} from './api/session';
 import {UIStore} from './UIStore';
-const App = () => {
+import RNShake from 'react-native-shake';
+import PushNotification from 'react-native-push-notification';
+import chL from '../assets/voices/chL.mp3';
+
+const App = props => {
+  console.log('props', props);
+
+  PushNotification.createChannel({
+    channelId: 'woman-safety-app',
+    channelName: 'Woman Safety',
+  });
+
   const [login, setLogin] = useState(false);
   const [onboard, setonboard] = useState(false);
   const [splash, setsplash] = useState(false);
@@ -29,6 +40,7 @@ const App = () => {
       console.log('CheckOnboarding', error);
     }
   };
+
   const checkLogin = async () => {
     try {
       const value = await AsyncStorage.getItem('@login');
@@ -40,7 +52,8 @@ const App = () => {
       console.log('CheckOnboarding', error);
     }
   };
-  // const {signIn}=React.useContext(AuthContext);
+
+  const [mainBtn, setmainBtn] = useState('SOS');
 
   const authContext = React.useMemo(() => ({
     signIn: (email, password) => {
@@ -102,12 +115,59 @@ const App = () => {
         console.log('ERROR/PROFILE/142', err);
       }
     },
+    sosClick: () => {
+      setmainBtn(mainBtn == 'STOP' ? 'SOS' : 'STOP');
+      if (mainBtn == 'STOP') {
+        PushNotification.localNotification({
+          channelId: 'woman-safety-app',
+          title: 'Your Emargency alert has started.',
+          message: 'You are shakeing your device . Your Alert start . ',
+          actions: ['Stop'],
+          messageId: 1,
+          category: 'Warning',
+          color: 'red',
+          ongoing: true,
+          id: 1,
+          picture: 'https://source.unsplash.com/random/?city,night',
+          // soundName: 'chL',
+        });
+      } else {
+        PushNotification.cancelLocalNotification(1);
+      }
+      return new Promise(res => {
+        res(mainBtn);
+      });
+    },
   }));
+
   useEffect(() => {
     checkOnboarding();
     checkLogin();
     setsplash(true);
   }, [login]);
+
+  React.useEffect(() => {
+    const subscription = RNShake.addListener(() => {
+      PushNotification.localNotification({
+        channelId: 'woman-safety-app',
+        title: 'Your Emargency alert has started.',
+        message: 'You are shakeing your device . Your Alert start . ',
+        actions: ['Stop'],
+        messageId: 1,
+        category: 'Warning',
+        color: 'red',
+        ongoing: true,
+        id: 1,
+        picture: 'https://source.unsplash.com/random/?city,night',
+        // soundName: 'chL',
+      });
+    });
+
+    return () => {
+      // Your code here...
+      subscription.remove();
+    };
+  }, []);
   return (
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>

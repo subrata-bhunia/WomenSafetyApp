@@ -17,8 +17,11 @@ import Button from '../../Components/Button';
 import chL from '../../../assets/voices/chL.mp3';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AuthContext} from '../../Components/context';
 var Sound = require('react-native-sound');
 const Home = () => {
+  const {sosClick} = React.useContext(AuthContext);
+  const [btnName, setbtnName] = useState('SOS');
   const currentLocation = UIStore.useState(s => s.lastLocation);
   Sound.setCategory('Playback');
   var audio = new Sound(chL, error => {
@@ -200,11 +203,6 @@ const Home = () => {
         </MapView>
       )}
       <View style={{position: 'absolute', top: 100}}>
-        {/* <View>
-                    <TouchableOpacity>
-                        <Icon name='menu' type="entypo" size={50} color='grey' style={{alignSelf:'flex-start',margin:20 ,elevation:5}} />
-                    </TouchableOpacity>
-                </View> */}
         {/* ------------------------- */}
         <View
           style={{
@@ -266,7 +264,7 @@ const Home = () => {
             marginTop: 20,
             marginLeft: -10,
           }}>
-          <Button
+          {/* <Button
             onPress={() => gotoSafeZone()}
             btnStyle={{
               height: 50,
@@ -284,8 +282,8 @@ const Home = () => {
               name: 'Safety',
               type: 'ant-design',
             }}
-          />
-          <Button
+          /> */}
+          {/* <Button
             //  onPress={()=>navigation.navigate('Home')}
             btnStyle={{
               height: 50,
@@ -302,7 +300,7 @@ const Home = () => {
               name: 'bell-o',
               type: 'font-awesome',
             }}
-          />
+          /> */}
         </View>
         {/* ---------------------------------- */}
         <View
@@ -353,7 +351,9 @@ const Home = () => {
         <View>
           <TouchableOpacity
             //  onPress={()=>AsyncStorage.clear((err)=>console.log("Error Clear",err))}
-            onPress={() => console.warn('SOS')}
+            onPress={() => {
+              sosClick().then(res => setbtnName(res));
+            }}
             style={{
               height: 150,
               width: 150,
@@ -373,7 +373,7 @@ const Home = () => {
                 color: '#fff',
                 fontSize: 30,
               }}>
-              SOS
+              {btnName}
             </Text>
           </TouchableOpacity>
         </View>
