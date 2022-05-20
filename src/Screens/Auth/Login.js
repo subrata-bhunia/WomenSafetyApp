@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import {Input} from 'galio-framework';
 import {Colors, FontFamily, Sizes} from '../../Constants/constants';
-import {NeuButton} from 'neumorphism-ui';
+
 import {useNavigation} from '@react-navigation/core';
 import {useRoute} from '@react-navigation/native';
 import Button from '../../Components/Button';
@@ -39,7 +39,7 @@ const Login = () => {
         method: 'post',
         url: apiUrl,
         data: {
-          full_name: email,
+          email: email,
           password: password,
         },
       })
@@ -76,6 +76,7 @@ const Login = () => {
         .catch(err => {
           if (err) {
             SignIn();
+            console.log(err);
           }
         });
     }
@@ -97,7 +98,7 @@ const Login = () => {
       />
       <View style={{flex: 0.7}}>
         <Input
-          placeholder="Enter your email address || Name" // Backend will change
+          placeholder="Enter your email address" // Backend will change
           rounded
           type="email-address"
           style={[styles.input, {width: width * 0.9}]}

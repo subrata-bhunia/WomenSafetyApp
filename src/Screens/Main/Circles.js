@@ -5,6 +5,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  ToastAndroid,
   View,
 } from 'react-native';
 import {Icon, Image} from 'react-native-elements';
@@ -12,6 +13,16 @@ import Header from '../../Components/Header';
 import {SwiperFlatList} from 'react-native-swiper-flatlist';
 import {Colors, FontFamily, Sizes} from '../../Constants/constants';
 import Button from '../../Components/Button';
+import Modal from 'react-native-modal';
+import {TextInput} from 'react-native-paper';
+import {
+  createCircle,
+  createPerson,
+  deleteCircle,
+  getAllCircle,
+} from '../../api/sos';
+import {UIStore} from '../../UIStore';
+import CustomModel from '../../Components/CustomModel';
 const data = [
   {
     h1: 'Cillum nostrud',
@@ -30,24 +41,7 @@ const data = [
       'https://cdn-icons.flaticon.com/png/512/1165/premium/1165725.png?token=exp=1649043447~hmac=353db4b90d97243aea82ef13763e32d4',
   },
 ];
-// const CirclesData = [];
-const CirclesData = [
-  {
-    id: '0266a0e0-50d7-5242-b1a0-7e1c8d2f00d47',
-    circleName: 'Friends',
-    count: 62,
-  },
-  {
-    id: '677178ad8-84c3-5d36-9fcb-48c7d857654b7',
-    circleName: 'ABC',
-    count: 5,
-  },
-  {
-    id: 'fb3be75f-d34b7-5abe-ae4a-701a8a889185c297',
-    circleName: 'Birdie',
-    count: 5,
-  },
-];
+
 const Circles = () => {
   const renderItems = ({item}) => {
     // console.log(item);
@@ -97,6 +91,98 @@ const Circles = () => {
       </View>
     );
   };
+  const user_id = UIStore.useState(s => s.userId);
+  const [circleadd, setcircleadd] = React.useState(false);
+  const [personadd, setpersonadd] = React.useState(false);
+  const [circleName, setcircleName] = React.useState('');
+  const [personName, setpersonName] = React.useState('');
+  const [personPhone, setpersonPhone] = React.useState('');
+  const [relation, setrelation] = React.useState('');
+  const [name, setname] = React.useState('');
+  const [eee, seteee] = React.useState('');
+  const [circleList, setCircleList] = React.useState([]);
+  const [modal, setmodal] = React.useState(false);
+  const [lastselectCircleID, setlastselectCircleID] = React.useState('');
+  const getAllCircles = () => {
+    getAllCircle(user_id)
+      .then(res => {
+        if (res.data?.success == 1) {
+          setCircleList(res.data?.data);
+        } else {
+          console.log('API ERROR');
+        }
+      })
+      .catch(err => {
+        getAllCircles();
+      });
+  };
+  React.useEffect(() => {
+    getAllCircles();
+  }, [personadd]);
+
+  const addCircle = () => {
+    var data = {
+      name: name,
+    };
+    if (name.length > 0) {
+      createCircle(data, user_id)
+        .then(res => {
+          if (res.data?.success == 1) {
+            ToastAndroid.show(res.data.data, ToastAndroid.SHORT);
+            getAllCircles();
+            setcircleadd(false);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } else {
+      seteee('Please enter Circle Name');
+    }
+  };
+
+  const deleteCircles = circle_id => {
+    deleteCircle({
+      user_id: user_id,
+      circle_id: `${circle_id}`,
+    })
+      .then(res => {
+        if (res.data?.success == 1) {
+          getAllCircles();
+          ToastAndroid.show(res.data?.data, ToastAndroid.SHORT);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  const addPerson = circle_id => {
+    if (
+      personName.length > 1 &&
+      personPhone.length == 10 &&
+      relation.length > 1
+    ) {
+      createPerson({
+        user_id: user_id,
+        circle_id: circle_id,
+        name: personName,
+        phone: personPhone,
+        relation: relation,
+      })
+        .then(res => {
+          if (res.data.success == 1) {
+            ToastAndroid.show(res.data.data, ToastAndroid.SHORT);
+            setpersonadd(false);
+            console.log(res.data);
+          }
+        })
+        .catch(err => console.log(err));
+    } else {
+      seteee('Please Fill Everything.');
+    }
+  };
+  // console.log('USERID', user_id);
   return (
     <View style={styles.container}>
       <Header backBtn={true} name="Circles" />
@@ -128,7 +214,7 @@ const Circles = () => {
         My Circle
       </Text>
       <FlatList
-        data={CirclesData}
+        data={circleList}
         renderItem={({item}) => {
           const randomBetween = (min, max) =>
             min + Math.floor(Math.random() * (max - min + 1));
@@ -163,14 +249,14 @@ const Circles = () => {
                     fontSize: 20,
                     color: `rgba(${r},${g},${b},1)`,
                   }}>
-                  {item.circleName.charAt(0)}
+                  {item.name.charAt(0)}
                 </Text>
               </View>
               {/* Name & Count */}
               <View style={{alignItems: 'center'}}>
                 <Text
                   style={{fontFamily: FontFamily.semi_bold, marginBottom: 7}}>
-                  {item.circleName}
+                  {item.name}
                 </Text>
                 <View
                   style={{
@@ -199,6 +285,11 @@ const Circles = () => {
                     position: 'absolute',
                     right: -15,
                     top: 16,
+                  }}
+                  onPress={() => {
+                    setpersonadd(true);
+                    setcircleName(item.name);
+                    setlastselectCircleID(item.id);
                   }}>
                   <Icon
                     name="plus"
@@ -210,7 +301,12 @@ const Circles = () => {
                 </Pressable>
               </View>
               {/* Cross */}
-              <Pressable style={{elevation: 5}}>
+              <Pressable
+                style={{elevation: 5}}
+                onPress={() => {
+                  setlastselectCircleID(item.id);
+                  setmodal(true);
+                }}>
                 <Icon
                   name="cross"
                   type="entypo"
@@ -242,7 +338,9 @@ const Circles = () => {
         }}
       />
       <Button
-        //  onPress={()=>signUpUser()}
+        onPress={() => {
+          setcircleadd(true);
+        }}
         btnStyle={{
           height: 60,
           width: Sizes.ScreenWidth * 0.7,
@@ -255,6 +353,213 @@ const Circles = () => {
           color: Colors.TextColor,
         }}
         btnName="Add Circle"
+      />
+      <Modal
+        isVisible={circleadd}
+        animationIn="bounceIn"
+        animationOut="bounceOut">
+        <View
+          style={{
+            backgroundColor: Colors.color4,
+            padding: 20,
+            borderRadius: 20,
+          }}>
+          <Text
+            style={{
+              textAlign: 'center',
+              fontFamily: FontFamily.bold,
+              color: Colors.TextColor,
+              fontSize: 20,
+            }}>
+            Add Circle
+          </Text>
+          <TextInput
+            label={'Circle Name*'}
+            activeUnderlineColor={Colors.color2}
+            activeOutlineColor={Colors.color1}
+            placeholder="Enter Circle Name"
+            onChangeText={txt => setname(txt)}
+            style={{
+              marginVertical: 20,
+              borderRadius: 10,
+              fontFamily: FontFamily.semi_bold,
+              fontSize: 18,
+              width: '95%',
+              alignSelf: 'center',
+            }}
+            l
+          />
+          <Button
+            btnStyle={{
+              height: 60,
+              width: Sizes.ScreenWidth * 0.7,
+              borderRadius: 50,
+              backgroundColor: Colors.color4,
+              marginBottom: 20,
+            }}
+            textStyle={{
+              fontFamily: FontFamily.semi_bold,
+              color: Colors.TextColor,
+            }}
+            btnName="Add Circle"
+            onPress={() => {
+              addCircle();
+              // setcircleadd(false);
+            }}
+          />
+          <Button
+            onPress={() => {
+              setcircleadd(false);
+            }}
+            btnStyle={{
+              height: 60,
+              width: Sizes.ScreenWidth * 0.7,
+              borderRadius: 50,
+              backgroundColor: Colors.color4,
+              marginBottom: 20,
+            }}
+            textStyle={{
+              fontFamily: FontFamily.semi_bold,
+              color: Colors.TextColor,
+            }}
+            btnName="Cancel"
+          />
+          <Text
+            style={{
+              textAlign: 'center',
+              fontFamily: FontFamily.bold,
+              color: Colors.color1,
+            }}>
+            {eee}
+          </Text>
+        </View>
+      </Modal>
+      <Modal
+        isVisible={personadd}
+        animationIn="bounceIn"
+        animationOut="bounceOut">
+        <View
+          style={{
+            backgroundColor: Colors.color4,
+            padding: 20,
+            borderRadius: 20,
+          }}>
+          <Text
+            style={{
+              textAlign: 'center',
+              fontFamily: FontFamily.bold,
+              color: Colors.TextColor,
+              fontSize: 20,
+            }}>
+            {circleName}
+          </Text>
+          <TextInput
+            label={'Name'}
+            activeUnderlineColor={Colors.color2}
+            activeOutlineColor={Colors.color1}
+            placeholder="Enter Name"
+            value={personName}
+            onChangeText={txt => setpersonName(txt)}
+            style={{
+              // borderWidth: 1,
+              marginVertical: 20,
+              borderRadius: 10,
+              fontFamily: FontFamily.semi_bold,
+              fontSize: 18,
+              width: '95%',
+              alignSelf: 'center',
+            }}
+          />
+          <TextInput
+            label={'Phone No'}
+            activeUnderlineColor={Colors.color2}
+            activeOutlineColor={Colors.color1}
+            placeholder="Enter Phone Name"
+            value={personPhone}
+            onChangeText={txt => setpersonPhone(txt)}
+            style={{
+              // borderWidth: 1,
+              marginVertical: 20,
+              borderRadius: 10,
+              fontFamily: FontFamily.semi_bold,
+              fontSize: 18,
+              width: '95%',
+              alignSelf: 'center',
+            }}
+          />
+          <TextInput
+            label={'Relation'}
+            activeUnderlineColor={Colors.color2}
+            activeOutlineColor={Colors.color1}
+            placeholder="Enter Relationship with"
+            onChangeText={txt => setrelation(txt)}
+            value={relation}
+            style={{
+              // borderWidth: 1,
+              marginVertical: 20,
+              borderRadius: 10,
+              fontFamily: FontFamily.semi_bold,
+              fontSize: 18,
+              width: '95%',
+              alignSelf: 'center',
+            }}
+          />
+          <Button
+            btnStyle={{
+              height: 60,
+              width: Sizes.ScreenWidth * 0.7,
+              borderRadius: 50,
+              backgroundColor: Colors.color4,
+              marginBottom: 20,
+            }}
+            textStyle={{
+              fontFamily: FontFamily.semi_bold,
+              color: Colors.TextColor,
+            }}
+            btnName="Add Contact"
+            onPress={() => addPerson(lastselectCircleID)}
+          />
+          <Button
+            onPress={() => {
+              setpersonadd(false);
+            }}
+            btnStyle={{
+              height: 60,
+              width: Sizes.ScreenWidth * 0.7,
+              borderRadius: 50,
+              backgroundColor: Colors.color4,
+              marginBottom: 20,
+            }}
+            textStyle={{
+              fontFamily: FontFamily.semi_bold,
+              color: Colors.TextColor,
+            }}
+            btnName="Cancel"
+          />
+          <Text
+            style={{
+              textAlign: 'center',
+              fontFamily: FontFamily.bold,
+              color: Colors.color1,
+            }}>
+            {eee}
+          </Text>
+        </View>
+      </Modal>
+      <CustomModel
+        open={modal}
+        setopen={setmodal}
+        h1="Are you want delete circle?"
+        yes={{
+          name: 'Delete',
+          onPress: () => {
+            deleteCircles(lastselectCircleID);
+            setmodal(false);
+          },
+        }}
+        no={{
+          name: 'Cancel',
+        }}
       />
     </View>
   );

@@ -61,7 +61,7 @@ const App = props => {
         alert(`🔸 Please Check email \n🔸 Please Check Password [>6] \n`);
       } else {
         SignIn({
-          full_name: email,
+          email: email,
           password: password,
         })
           .then(function (response) {
@@ -158,7 +158,7 @@ const App = props => {
         color: 'red',
         ongoing: true,
         id: 1,
-        picture: 'https://source.unsplash.com/random/?city,night',
+        // picture: 'https://source.unsplash.com/random/?city,night',
         // soundName: 'chL',
       });
     });
@@ -168,6 +168,7 @@ const App = props => {
       subscription.remove();
     };
   }, []);
+
   return (
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>

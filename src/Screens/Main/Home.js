@@ -44,18 +44,6 @@ const Home = () => {
     //     }
     //   });
   });
-
-  const clearAscynStorage = async () => {
-    try {
-      AsyncStorage.clear(err => {
-        if (!err) {
-          console.log('clearAscynStorage');
-        }
-      });
-    } catch (error) {
-      console.log('Error clearAscynStorage', error);
-    }
-  };
   const checkUserId = async () => {
     try {
       const value = await AsyncStorage.getItem('@userId');
@@ -90,17 +78,41 @@ const Home = () => {
             console.log('playback failed due to audio decoding errors');
           }
         });
-        audio.setNumberOfLoops(-1);
+        audio.setNumberOfLoops(0);
       });
     // ----
-
     //   --------------
     checkUserId();
     // ------------
   }, []);
   // ------------------------------------------- //
   const navigation = useNavigation();
+  const [region, setRegion] = React.useState({
+    // longitud,
+    latitudeDelta: 0.0054,
+    longitudeDelta: 0.0053,
+  });
+  const onPressZoomIn = () => {
+    var add = {
+      ...region,
+      latitudeDelta: region.latitudeDelta * 10,
+      longitudeDelta: region.longitudeDelta * 10,
+    };
 
+    setRegion(add);
+    // this.map.animateToRegion(this.region, 100);
+  };
+
+  const onPressZoomOut = () => {
+    var minus = {
+      ...region,
+      latitudeDelta: region.latitudeDelta / 10,
+      longitudeDelta: region.longitudeDelta / 10,
+    };
+    setRegion(minus);
+    // map.animateToRegion(region, 100);
+  };
+  // ---------------------- //
   function gotoSafetyTips() {
     navigation.navigate('SafetyTips');
   }
@@ -126,21 +138,21 @@ const Home = () => {
         <BallIndicator />
       ) : (
         <MapView
-          initialRegion={{
+          region={{
             latitude: currentLocation.latitude,
             // latitude:22.572645,
             longitude: currentLocation.longitude,
-            // longitud,
-            latitudeDelta: 0.0054,
-            longitudeDelta: 0.0053,
+            latitudeDelta: region.latitudeDelta,
+            longitudeDelta: region.longitudeDelta,
           }}
           style={{
             height: '100%',
             width: '100%',
-            opacity: 0.6,
+            opacity: 1,
           }}
           mapType="standard"
           // showsMyLocationButton={true}
+          // region={}
         >
           <Marker
             coordinate={{
@@ -161,8 +173,6 @@ const Home = () => {
               longitude: currentLocation.longitude + 0.001,
               latitudeDelta: 0.1,
             }}
-            //  pinColor='red'
-            //  image={require('../../../assets/images/icons/red.png')}
             title="Test Title"
             description="Test Description"
           />
@@ -173,8 +183,6 @@ const Home = () => {
               longitude: currentLocation.longitude + 0.0021,
               latitudeDelta: 0.1,
             }}
-            //  pinColor='red'
-            //  image={require('../../../assets/images/icons/red.png')}
             title="Test Title"
             description="Test Description"
           />
@@ -197,8 +205,6 @@ const Home = () => {
               longitude: currentLocation.longitude - 0.001,
               latitudeDelta: 0.1,
             }}
-            //  pinColor='red'
-            //  image={require('../../../assets/images/icons/red.png')}
           />
         </MapView>
       )}
@@ -263,45 +269,7 @@ const Home = () => {
             alignSelf: 'center',
             marginTop: 20,
             marginLeft: -10,
-          }}>
-          {/* <Button
-            onPress={() => gotoSafeZone()}
-            btnStyle={{
-              height: 50,
-              width: Sizes.ScreenWidth * 0.4,
-              borderRadius: 50,
-              backgroundColor: Colors.color5,
-              flexDirection: 'row',
-            }}
-            textStyle={{
-              fontFamily: FontFamily.semi_bold,
-              color: '#000',
-            }}
-            btnName=" Safe zone"
-            icon={{
-              name: 'Safety',
-              type: 'ant-design',
-            }}
-          /> */}
-          {/* <Button
-            //  onPress={()=>navigation.navigate('Home')}
-            btnStyle={{
-              height: 50,
-              width: Sizes.ScreenWidth * 0.4,
-              borderRadius: 50,
-              backgroundColor: Colors.color5,
-            }}
-            textStyle={{
-              fontFamily: FontFamily.semi_bold,
-              color: '#000',
-            }}
-            btnName=" Step define"
-            icon={{
-              name: 'bell-o',
-              type: 'font-awesome',
-            }}
-          /> */}
-        </View>
+          }}></View>
         {/* ---------------------------------- */}
         <View
           style={{
@@ -313,7 +281,7 @@ const Home = () => {
           }}>
           <View>
             <TouchableOpacity
-              onPress={() => console.log('Sign in now')}
+              onPress={() => onPressZoomIn()}
               style={{
                 height: 50,
                 width: 50,
@@ -323,14 +291,13 @@ const Home = () => {
                 alignItems: 'center',
                 elevation: 5,
                 justifyContent: 'center',
-              }}
-              noPressedState={true}>
-              <Icon name="dot-circle" type="font-awesome-5" size={25} />
+              }}>
+              <Icon name="zoom-in" type="feather" size={25} />
             </TouchableOpacity>
           </View>
           <View>
             <TouchableOpacity
-              onPress={() => console.log('Sign in now')}
+              onPress={() => onPressZoomOut()}
               style={{
                 height: 50,
                 width: 50,
@@ -341,7 +308,7 @@ const Home = () => {
                 justifyContent: 'center',
               }}
               noPressedState={true}>
-              <Icon name="map" type="font-awesome-5" size={25} />
+              <Icon name="zoom-out" type="feather" size={25} />
             </TouchableOpacity>
           </View>
         </View>

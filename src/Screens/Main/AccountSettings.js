@@ -66,7 +66,6 @@ const AccountSettings = ({route}) => {
               }}>
               <Input
                 label="First Name"
-                caretHidden={true}
                 defaultValue={name[0]}
                 inputStyle={{
                   fontFamily: FontFamily.default,
@@ -88,7 +87,6 @@ const AccountSettings = ({route}) => {
               />
               <Input
                 label="Last Name"
-                caretHidden={true}
                 defaultValue={name[1]}
                 inputStyle={{
                   fontFamily: FontFamily.default,
@@ -112,7 +110,6 @@ const AccountSettings = ({route}) => {
             </View>
             <Input
               label="Email Address"
-              caretHidden={true}
               keyboardType="email-address"
               defaultValue={userDetail?.email}
               inputStyle={{
@@ -159,7 +156,6 @@ const AccountSettings = ({route}) => {
             />
             <Input
               label="Mobile No"
-              caretHidden={true}
               keyboardType="number-pad"
               defaultValue={`${userDetail?.phone}`}
               inputStyle={{

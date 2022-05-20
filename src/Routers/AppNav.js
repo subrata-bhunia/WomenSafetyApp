@@ -56,7 +56,6 @@ const AppNav = () => {
           } else {
             iconName = focused ? 'md-help-circle' : 'md-help-circle-outline';
           }
-
           return <Ionicons name={iconName} size={30} color={color} />;
         },
         tabBarActiveTintColor: Colors.color1,
