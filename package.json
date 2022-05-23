@@ -8,7 +8,9 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "ok": "code . && react-native run-android"
+    "ok": "code . && react-native run-android",
+    "prebuild": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
+    "build": "cd android && gradlew assembleDebug"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.15.14",
@@ -50,6 +52,7 @@
     "react-native-shake": "^5.1.1",
     "react-native-sms": "^1.11.0",
     "react-native-sound": "^0.11.1",
+    "react-native-swipe-list-view": "^3.2.9",
     "react-native-swiper-flatlist": "^3.0.16",
     "react-native-vector-icons": "^9.0.0",
     "styled-components": "^5.3.3"

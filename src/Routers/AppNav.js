@@ -17,6 +17,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Contacts from '../Screens/Main/Contacts';
 import About1 from '../Screens/Main/About1';
 import AccountSettings from '../Screens/Main/AccountSettings';
+import NotificationScreen from '../Screens/Main/Test';
 
 const HomeStack = createNativeStackNavigator();
 
@@ -36,6 +37,7 @@ function HomeStackScreen() {
       <HomeStack.Screen name="Contacts" component={Contacts} />
       <HomeStack.Screen name="About1" component={About1} />
       <HomeStack.Screen name="AccountSettings" component={AccountSettings} />
+      <HomeStack.Screen name="Test" component={NotificationScreen} />
     </HomeStack.Navigator>
   );
 }

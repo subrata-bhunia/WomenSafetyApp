@@ -1,12 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
+  View,
+  Text,
+  StyleSheet,
+  Animated,
+  TouchableHighlight,
+  TouchableOpacity,
+  StatusBar,
   FlatList,
   Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
   ToastAndroid,
-  View,
 } from 'react-native';
 import {Icon, Image} from 'react-native-elements';
 import Header from '../../Components/Header';
@@ -20,9 +23,13 @@ import {
   createPerson,
   deleteCircle,
   getAllCircle,
+  getAllContactByCircleId,
 } from '../../api/sos';
 import {UIStore} from '../../UIStore';
 import CustomModel from '../../Components/CustomModel';
+import {SwipeListView} from 'react-native-swipe-list-view';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 const data = [
   {
     h1: 'Cillum nostrud',
@@ -91,6 +98,7 @@ const Circles = () => {
       </View>
     );
   };
+
   const user_id = UIStore.useState(s => s.userId);
   const [circleadd, setcircleadd] = React.useState(false);
   const [personadd, setpersonadd] = React.useState(false);
@@ -103,6 +111,236 @@ const Circles = () => {
   const [circleList, setCircleList] = React.useState([]);
   const [modal, setmodal] = React.useState(false);
   const [lastselectCircleID, setlastselectCircleID] = React.useState('');
+  const [contactListSelectedCircle, setcontactListSelectedCircle] =
+    React.useState([]);
+  const [contactListSelectedCircleModal, setcontactListSelectedCircleModal] =
+    React.useState(false);
+  const [listData, setListData] = useState([]);
+  React.useEffect(() => {
+    setListData(
+      contactListSelectedCircle.map((item, index) => ({
+        key: `${index}`,
+        name: item.name,
+        phone: item.phone1,
+        relation: item.relation,
+        id: item.id,
+      })),
+    );
+  }, [contactListSelectedCircle]);
+  const closeRow = (rowMap, rowKey) => {
+    if (rowMap[rowKey]) {
+      rowMap[rowKey].closeRow();
+    }
+  };
+
+  const deleteRow = (rowMap, rowKey) => {
+    closeRow(rowMap, rowKey);
+    const newData = [...listData];
+    const prevIndex = listData.findIndex(item => item.key === rowKey);
+    newData.splice(prevIndex, 1);
+    setListData(newData);
+  };
+
+  const onRowDidOpen = rowKey => {
+    console.log('This row opened', rowKey);
+  };
+
+  const onLeftActionStatusChange = rowKey => {
+    console.log('onLeftActionStatusChange', rowKey);
+  };
+
+  const onRightActionStatusChange = rowKey => {
+    console.log('onRightActionStatusChange', rowKey);
+  };
+
+  const onRightAction = rowKey => {
+    console.log('onRightAction', rowKey);
+  };
+
+  const onLeftAction = rowKey => {
+    console.log('onLeftAction', rowKey);
+  };
+
+  const VisibleItem = props => {
+    const {
+      data,
+      rowHeightAnimatedValue,
+      removeRow,
+      leftActionState,
+      rightActionState,
+    } = props;
+
+    if (rightActionState) {
+      Animated.timing(rowHeightAnimatedValue, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: false,
+      }).start(() => {
+        removeRow();
+      });
+    }
+    var r = randomBetween(0, 255);
+    var g = randomBetween(0, 255);
+    var b = randomBetween(0, 255);
+    return (
+      <Animated.View style={[styles.rowFront]}>
+        <TouchableHighlight
+          style={styles.rowFrontVisible}
+          // onPress={() => console.log('Element touched')}
+          // underlayColor={'#aaa'}
+        >
+          <View
+            style={{
+              // width: '95%',
+              // alignSelf: 'center',
+              // backgroundColor: '#fff',
+              // margin: 5,
+              flexDirection: 'row',
+              alignItems: 'center',
+              // padding: 10,
+              borderRadius: 10,
+            }}>
+            <View
+              style={{
+                height: 60,
+                width: 60,
+                borderRadius: 60,
+                backgroundColor: `rgba(${r},${g},${b},0.3)`,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderWidth: 2,
+                borderColor: '#fff',
+                marginRight: 10,
+              }}>
+              <Text
+                style={{
+                  fontFamily: FontFamily.bold,
+                  fontSize: 20,
+                  color: `rgba(${r},${g},${b},1)`,
+                }}>
+                {data.item.name.charAt(0)}
+              </Text>
+            </View>
+            <View>
+              <Text style={styles.title} numberOfLines={1}>
+                {data.item.name}
+              </Text>
+              <Text style={styles.details} numberOfLines={1}>
+                {data.item.phone}
+              </Text>
+              <Text style={styles.details} numberOfLines={1}>
+                {data.item.relation}
+              </Text>
+            </View>
+          </View>
+        </TouchableHighlight>
+      </Animated.View>
+    );
+  };
+  const renderItem = (data, rowMap) => {
+    const rowHeightAnimatedValue = new Animated.Value(60);
+    return (
+      <VisibleItem
+        data={data}
+        rowHeightAnimatedValue={rowHeightAnimatedValue}
+        removeRow={() => deleteRow(rowMap, data.item.key)}
+      />
+    );
+  };
+  const HiddenItemWithActions = props => {
+    const {
+      swipeAnimatedValue,
+      leftActionActivated,
+      rightActionActivated,
+      rowActionAnimatedValue,
+      rowHeightAnimatedValue,
+      onClose,
+      onDelete,
+    } = props;
+
+    if (rightActionActivated) {
+      Animated.spring(rowActionAnimatedValue, {
+        toValue: 500,
+        useNativeDriver: false,
+      }).start();
+    } else {
+      Animated.spring(rowActionAnimatedValue, {
+        toValue: 75,
+        useNativeDriver: false,
+      }).start();
+    }
+    return (
+      <Animated.View style={[styles.rowBack, {height: 100}]}>
+        <Text>Left</Text>
+        {!leftActionActivated && (
+          <TouchableOpacity
+            style={[styles.backRightBtn, styles.backRightBtnLeft]}
+            onPress={onClose}>
+            <MaterialCommunityIcons
+              name="close-circle-outline"
+              size={25}
+              style={styles.trash}
+              color="#fff"
+            />
+          </TouchableOpacity>
+        )}
+        {!leftActionActivated && (
+          <Animated.View
+            style={[
+              styles.backRightBtn,
+              styles.backRightBtnRight,
+              {
+                flex: 1,
+                width: rowActionAnimatedValue,
+              },
+            ]}>
+            <TouchableOpacity
+              style={[styles.backRightBtn, styles.backRightBtnRight]}
+              onPress={onDelete}>
+              <Animated.View
+                style={[
+                  styles.trash,
+                  {
+                    transform: [
+                      {
+                        scale: swipeAnimatedValue.interpolate({
+                          inputRange: [-90, -45],
+                          outputRange: [1, 0],
+                          extrapolate: 'clamp',
+                        }),
+                      },
+                    ],
+                  },
+                ]}>
+                <MaterialCommunityIcons
+                  name="trash-can-outline"
+                  size={25}
+                  color="#fff"
+                />
+              </Animated.View>
+            </TouchableOpacity>
+          </Animated.View>
+        )}
+      </Animated.View>
+    );
+  };
+
+  const renderHiddenItem = (data, rowMap) => {
+    const rowActionAnimatedValue = new Animated.Value(75);
+    const rowHeightAnimatedValue = new Animated.Value(60);
+    return (
+      <HiddenItemWithActions
+        data={data}
+        rowMap={rowMap}
+        rowActionAnimatedValue={rowActionAnimatedValue}
+        rowHeightAnimatedValue={rowHeightAnimatedValue}
+        onClose={() => closeRow(rowMap, data.item.key)}
+        onDelete={() => deleteRow(rowMap, data.item.key)}
+      />
+    );
+  };
+
+  console.log('listData', listData);
   const getAllCircles = () => {
     getAllCircle(user_id)
       .then(res => {
@@ -182,7 +420,30 @@ const Circles = () => {
       seteee('Please Fill Everything.');
     }
   };
-  // console.log('USERID', user_id);
+  const randomBetween = (min, max) =>
+    min + Math.floor(Math.random() * (max - min + 1));
+
+  const getAllContactInCircle = circle_id => {
+    getAllContactByCircleId({
+      user_id: user_id,
+      circle_id: circle_id,
+    })
+      .then(res => {
+        if (res.data.success == 1) {
+          setcontactListSelectedCircle(res.data.data);
+        } else {
+          ToastAndroid.show(
+            'Something went to wrong. Try again !',
+            ToastAndroid.SHORT,
+          );
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        getAllContactInCircle(lastselectCircleID);
+      });
+  };
+  // console.log('CIRCLE ID', lastselectCircleID);
   return (
     <View style={styles.container}>
       <Header backBtn={true} name="Circles" />
@@ -216,13 +477,17 @@ const Circles = () => {
       <FlatList
         data={circleList}
         renderItem={({item}) => {
-          const randomBetween = (min, max) =>
-            min + Math.floor(Math.random() * (max - min + 1));
           var r = randomBetween(0, 255);
           var g = randomBetween(0, 255);
           var b = randomBetween(0, 255);
           return (
-            <View
+            <Pressable
+              onPress={() => {
+                setcontactListSelectedCircleModal(true);
+                setlastselectCircleID(item.id);
+                setcircleName(item.name);
+                getAllContactInCircle(item.id);
+              }}
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
@@ -318,7 +583,7 @@ const Circles = () => {
                   }}
                 />
               </Pressable>
-            </View>
+            </Pressable>
           );
         }}
         keyExtractor={item => item.id}
@@ -434,6 +699,7 @@ const Circles = () => {
           </Text>
         </View>
       </Modal>
+      {/* Contact Add */}
       <Modal
         isVisible={personadd}
         animationIn="bounceIn"
@@ -477,6 +743,8 @@ const Circles = () => {
             placeholder="Enter Phone Name"
             value={personPhone}
             onChangeText={txt => setpersonPhone(txt)}
+            keyboardType="number-pad"
+            maxLength={10}
             style={{
               // borderWidth: 1,
               marginVertical: 20,
@@ -546,10 +814,83 @@ const Circles = () => {
           </Text>
         </View>
       </Modal>
+      {/* List Modal */}
+      <Modal
+        isVisible={contactListSelectedCircleModal}
+        onBackdropPress={() => setcontactListSelectedCircleModal(false)}>
+        <View
+          style={{
+            backgroundColor: Colors.color4,
+            padding: 20,
+            borderRadius: 20,
+          }}>
+          <Text
+            style={{
+              textAlign: 'center',
+              fontFamily: FontFamily.bold,
+              color: Colors.TextColor,
+              fontSize: 20,
+              marginBottom: 20,
+            }}>
+            {circleName}
+          </Text>
+          <SwipeListView
+            useFlatList={true}
+            data={listData}
+            renderItem={renderItem}
+            renderHiddenItem={renderHiddenItem}
+            leftOpenValue={75}
+            rightOpenValue={-150}
+            disableRightSwipe
+            onRowDidOpen={onRowDidOpen}
+            leftActivationValue={100}
+            rightActivationValue={-200}
+            leftActionValue={0}
+            rightActionValue={-500}
+            onLeftAction={onLeftAction}
+            onRightAction={onRightAction}
+            onLeftActionStatusChange={onLeftActionStatusChange}
+            onRightActionStatusChange={onRightActionStatusChange}
+            ListEmptyComponent={() => {
+              return (
+                <View>
+                  <Text
+                    style={{
+                      padding: 30,
+                      textAlign: 'center',
+                      fontFamily: FontFamily.semi_bold,
+                    }}>
+                    No Contact Found .
+                  </Text>
+                  <Button
+                    onPress={() => {
+                      setpersonadd(true);
+                      setcircleName(circleName);
+                      setlastselectCircleID(lastselectCircleID);
+                    }}
+                    btnStyle={{
+                      height: 60,
+                      width: Sizes.ScreenWidth * 0.7,
+                      borderRadius: 50,
+                      backgroundColor: Colors.color4,
+                      marginBottom: 20,
+                    }}
+                    textStyle={{
+                      fontFamily: FontFamily.semi_bold,
+                      color: Colors.TextColor,
+                    }}
+                    btnName="Add Contact"
+                  />
+                </View>
+              );
+            }}
+          />
+        </View>
+      </Modal>
       <CustomModel
         open={modal}
         setopen={setmodal}
-        h1="Are you want delete circle?"
+        h1="Are you want to delete circle?"
         yes={{
           name: 'Delete',
           onPress: () => {
@@ -569,8 +910,81 @@ export default Circles;
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: '#f4f4f4',
     flex: 1,
   },
   child: {width: Sizes.ScreenWidth, justifyContent: 'center'},
   text: {fontSize: Sizes.ScreenWidth * 0.1, textAlign: 'center'},
+  backTextWhite: {
+    color: '#FFF',
+  },
+  rowFront: {
+    backgroundColor: '#FFF',
+    borderRadius: 5,
+    // height: 70,
+    margin: 5,
+    marginBottom: 15,
+    // marginTop: 15,
+    shadowColor: '#999',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 5,
+  },
+  rowFrontVisible: {
+    backgroundColor: '#FFF',
+    borderRadius: 5,
+    height: 60,
+    padding: 10,
+    marginBottom: 15,
+  },
+  rowBack: {
+    alignItems: 'center',
+    backgroundColor: '#DDD',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingLeft: 15,
+    margin: 5,
+    marginBottom: 15,
+    borderRadius: 5,
+    // marginTop: 15,
+    // height: 100,
+  },
+  backRightBtn: {
+    alignItems: 'flex-end',
+    bottom: 0,
+    justifyContent: 'center',
+    position: 'absolute',
+    top: 0,
+    width: 75,
+    paddingRight: 17,
+  },
+  backRightBtnLeft: {
+    backgroundColor: '#1f65ff',
+    right: 75,
+  },
+  backRightBtnRight: {
+    backgroundColor: 'red',
+    right: 0,
+    borderTopRightRadius: 5,
+    borderBottomRightRadius: 5,
+  },
+  trash: {
+    height: 25,
+    width: 25,
+    marginRight: 7,
+  },
+  title: {
+    fontSize: 14,
+    // fontWeight: 'bold',
+    marginBottom: 5,
+    color: '#666',
+    fontFamily: FontFamily.semi_bold,
+  },
+  details: {
+    fontSize: 12,
+    color: '#999',
+    fontFamily: FontFamily.semi_bold,
+  },
 });

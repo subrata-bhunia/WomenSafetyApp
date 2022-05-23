@@ -40,3 +40,20 @@ export const createPerson = data => {
     },
   });
 };
+
+// getAllContactByCircle_id
+
+export const getAllContactByCircleId = data => {
+  console.log(data);
+  return axios({
+    method: 'POST',
+    url: `${API_URL}/sos_contact/all`,
+    data: {
+      user_id: data.user_id,
+      circle_id: data.circle_id,
+    },
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+};

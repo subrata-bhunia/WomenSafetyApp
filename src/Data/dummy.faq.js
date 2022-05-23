@@ -1,170 +1,121 @@
 export default [
   {
-    title: 'Fugiat ullamco eiusmod anim excepteur ?',
+    title: 'Home is not a safe place for me. What can I do?',
     content:
-      'Minim consectetur laboris irure exercitation veniam exercitation in commodo eiusmod mollit proident. Consequat quis fugiat consectetur cupidatat aliqua ut laborum culpa mollit minim anim qui. Labore exercitation sint dolore consequat aliquip est ad do ad esse minim ea. Sunt elit incididunt consectetur non officia mollit dolore sunt commodo amet. Est eiusmod laborum incididunt labore labore dolor quis.\r\n',
+      'If you are experiencing violence, it may be helpful to reach out to family, friends and neighbours, to seek support from a hotline or, if safe, from online service for survivors of violence. Make a safety plan in case the violence against you or your children escalates. This includes: Identifying a neighbor, friend, relative, colleague, or shelter to go to in case you need to leave the house immediately for safety; Have a plan for how you will exit the house safely and how you will reach there (e.g. transport); Keep a few essential items (e.g. identification documents, phone, money, medicines, and clothes) available, and a list of telephone numbers in case of an emergency; If possible, develop a code with a trusted neighbour so they can come to your aid in case of an emergency. r\n',
     icon: {
-      name: 'keyboard',
-      family: 'material',
-      size: 30,
-      color: '#909',
-    },
-  },
-  {
-    title: 'Excepteur reprehenderit sint aliqua sunt et cupidatat dolor ?',
-    content:
-      'Commodo deserunt occaecat officia eu irure laborum qui. Tempor irure dolor incididunt ad fugiat fugiat excepteur incididunt exercitation consectetur non irure. Tempor commodo et ipsum ipsum amet deserunt ipsum aliquip voluptate aliqua occaecat exercitation ex commodo. Qui quis laboris occaecat Lorem nulla. Ut quis eiusmod labore eu et consequat. Amet mollit duis exercitation ad esse elit eiusmod nostrud exercitation nisi qui qui.\r\n',
-    icon: {
-      name: 'keyboard',
-      family: 'material',
+      name: 'hand-pointing-right',
+      family: 'material-community',
       size: 30,
       color: '#909',
     },
   },
   {
     title:
-      'Elit ipsum labore amet qui adipisicing amet Lorem laborum commodo tempor ?',
-    content:
-      'Velit dolor laboris sit sint aliqua sunt nostrud ad anim. Voluptate nulla non nisi non incididunt labore tempor eiusmod in culpa velit. Veniam cupidatat consectetur ullamco in elit cillum tempor amet velit. Fugiat eiusmod exercitation ut irure occaecat culpa occaecat anim nulla tempor enim. Veniam labore proident qui ut tempor eiusmod. Laborum duis sit velit quis incididunt et minim qui ullamco ipsum veniam ad tempor.\r\n',
+      'I need medical attention because of violence. Who can help me and where should I go?',
+    content: ` If you need urgent medical attention, call for an ambulance or contact your country’s emergency health services. If you need any other support, contact a specialized service if available or a health provider.  \r\n`,
     icon: {
-      name: 'keyboard',
-      family: 'material',
-      size: 30,
-      color: '#909',
-    },
-  },
-  {
-    title: 'Ut incididunt aute eiusmod adipisicing culpa do ?',
-    content:
-      'Ut occaecat proident adipisicing magna sit qui cupidatat aliqua voluptate. Occaecat adipisicing ad ad nisi ex nostrud amet magna dolor proident enim elit fugiat id. Elit fugiat sunt deserunt adipisicing laborum. Est do et laborum magna deserunt in. Tempor culpa consectetur est eiusmod consequat est consectetur ut cillum adipisicing occaecat eu duis consequat. Veniam veniam mollit culpa velit.\r\n',
-    icon: {
-      name: 'keyboard',
-      family: 'material',
+      name: 'hand-pointing-right',
+      family: 'material-community',
       size: 30,
       color: '#909',
     },
   },
   {
     title:
-      'Adipisicing laborum nisi nisi esse anim mollit cillum labore labore ipsum Lorem ?',
-    content:
-      'Non consequat labore magna ad adipisicing amet et ad sint aliqua commodo sunt consequat. Veniam dolore est excepteur aute. Adipisicing adipisicing magna adipisicing consequat sunt minim excepteur nostrud nulla exercitation quis sunt. Veniam anim aute nisi officia minim cillum duis ipsum ea dolore velit. Duis non anim adipisicing ad laborum ad aliquip commodo tempor cupidatat nisi non. Ex magna laborum dolor anim. Ullamco proident dolor amet irure consequat exercitation voluptate ea consequat.\r\n',
+      'I am safe but I am suffering from mental / sexual /social / long-term physical health problems because of violence. Is there anyone who can help me ?',
+    content: `As much as possible, reduce sources of stress: Maintain contact with and seek support from family and friends via phone, email, text, etc.; Try to maintain daily routines and make time for physical activity and sleep; Use relaxation exercises (e.g. slow breathing, meditation, progressive muscle relaxation, grounding exercises) to relieve stressful thoughts and feelings; Engage in activities that in the past have helped with managing adversity. Seek care from a trained health provider for symptoms and conditions including injuries that need medical attention..\r\n`,
     icon: {
-      name: 'keyboard',
-      family: 'material',
-      size: 30,
-      color: '#909',
-    },
-  },
-  {
-    title: 'Dolor laboris voluptate pariatur ipsum Lorem ?',
-    content:
-      'Amet sint est mollit consectetur eu consequat laboris deserunt tempor laboris voluptate sint culpa in. Tempor est laboris aliquip labore. Ut cupidatat ullamco incididunt non dolore cillum. Magna dolor magna aliquip tempor labore ipsum nisi deserunt adipisicing cillum irure dolore culpa fugiat. Eu ea irure magna fugiat sint labore non sunt in nulla consectetur enim. Consectetur commodo eiusmod consectetur cupidatat magna pariatur deserunt dolor ea reprehenderit pariatur nostrud.\r\n',
-    icon: {
-      name: 'keyboard',
-      family: 'material',
-      size: 30,
-      color: '#909',
-    },
-  },
-  {
-    title: 'Duis excepteur aliqua ea id ut ullamco ?',
-    content:
-      'Occaecat aliqua ex amet do duis consectetur velit. Sunt consequat cillum nisi et nisi et tempor nostrud deserunt consectetur est velit id. Nisi deserunt velit pariatur proident. Pariatur dolore et tempor occaecat eu anim. Consectetur nostrud magna velit tempor aute excepteur officia esse excepteur nostrud elit anim.\r\n',
-    icon: {
-      name: 'keyboard',
-      family: 'material',
+      name: 'hand-pointing-right',
+      family: 'material-community',
       size: 30,
       color: '#909',
     },
   },
   {
     title:
-      'Amet in officia ea irure aute in duis in magna fugiat exercitation ?',
-    content:
-      'Ullamco velit qui mollit id est laboris amet sit dolor sunt exercitation. Commodo excepteur et minim laborum consequat ex quis est. Aliqua adipisicing tempor sit eu eiusmod consectetur incididunt.\r\n',
+      'I have harmed or am worried about hurting my partner(and children) with my words or actions. How can I stop?',
+    content: `If you feel yourself getting very annoyed, step away into another room or outside for a deep breath; Count down from 10 and breathe in and out until you feel calmer; Talk to a trusted friend, relative; Recognize that everyone in your family is experiencing stress during this time; Eliminate or reduce your alcohol consumption as much as possible. 
+The current measures to address the COVID-19 pandemic, such as restrictions on movement, as well as financial instability caused by the crisis, are likely to add to your stress. Take measures to ensure you manage your stress in a way that is respectful and safe to you and your family.\r\n`,
     icon: {
-      name: 'keyboard',
-      family: 'material',
+      name: 'hand-pointing-right',
+      family: 'material-community',
+      size: 30,
+      color: '#909',
+    },
+  },
+  {
+    title:
+      'Has violence against women increased since the beginning of the COVID-19 pandemic?',
+    content: `Violence against women is highly prevalent, and intimate partner violence is the most common form of violence. Whilst data are scarce, reports from across the world, including China, the United Kingdom, the United States of America, and other countries suggest a significant increase in domestic violence cases related to the COVID-19 pandemic. Reports from other countries suggest a reduction in survivors seeking services due to a combination of lockdown measures and not wanting to attend health services for fear of infection.\r\n`,
+    icon: {
+      name: 'hand-pointing-right',
+      family: 'material-community',
+      size: 30,
+      color: '#909',
+    },
+  },
+  {
+    title: 'How does COVID-19 increase the risk of violence for women?',
+    content: `Stress, the disruption of social and protective networks, loss of income and decreased access to services all can exacerbate the risk of violence for women. In many countries, where people are encouraged or required to stay at home, the risk of intimate partner violence is likely to increase. In addition, access to sexual and reproductive health services will likely become more limited. Other services, such as hotlines, crisis centers, shelters, legal aid, and protection services, may also be reduced, making it difficult for women to access the few sources of help that would usually be available.\r\n`,
+    icon: {
+      name: 'hand-pointing-right',
+      family: 'material-community',
+      size: 30,
+      color: '#909',
+    },
+  },
+  {
+    title:
+      'What effective action can I take against unsolicited and inappropriate images sent by men ?',
+    content: `This is something most women encounter these days and it is disgusting. Unfortunately, social media platforms hardly take action upon reporting such accounts. What can you do however, is take a screenshot of the harassment and file a complaint with the cyber police of your city and they should be able to help out.\r\n`,
+    icon: {
+      name: 'hand-pointing-right',
+      family: 'material-community',
+      size: 30,
+      color: '#909',
+    },
+  },
+  {
+    title:
+      'How do I tackle the unwanted male gaze in public places? How do I go about feeling confident and comfortable in public, no matter what I’m wearing?',
+    content: `The best thing to do to tackle the unwanted male gaze would be to raise your voice against it. I know it can be uncomfortable to do and we do feel inhibited, but when these men don’t think twice about staring us down in public, why should we when it comes to calling them out for their harassment? You will be surprised at how effective the simple act of calling someone is. Always keep your safety in mind when you do so, and call them out in a safe, public space. Never do it when you are alone .\r\n`,
+    icon: {
+      name: 'hand-pointing-right',
+      family: 'material-community',
       size: 30,
       color: '#982',
     },
   },
   {
-    title: 'Velit do incididunt eiusmod reprehenderit ?',
-    content:
-      'Esse incididunt occaecat proident pariatur tempor esse quis adipisicing eu laboris dolor consequat ex. Laborum laboris do voluptate qui amet et elit officia ea occaecat anim laborum Lorem mollit. Non veniam ipsum enim laborum. Duis Lorem consectetur minim ad dolor ullamco et magna Lorem laboris magna ut.\r\n',
+    title: 'Why women should use the women safety app ?',
+    content: `The women safety app can send the user’s location to her family ,relatives or friends if she faces any danger as well as she will also be able to see the safe and unsafe places near her .\r\n`,
     icon: {
-      name: 'keyboard',
-      family: 'material',
+      name: 'hand-pointing-right',
+      family: 'material-community',
       size: 30,
       color: '#801',
     },
   },
   {
-    title:
-      'Adipisicing qui enim nulla voluptate nisi cupidatat proident sint tempor ?',
-    content:
-      'Do voluptate laboris pariatur occaecat proident quis ex velit et consectetur. Enim aliqua consequat sit ex. Magna ullamco ad excepteur do eiusmod officia. Tempor enim ullamco aliqua anim fugiat et. Nulla voluptate ad commodo duis ea sit in nulla et proident.\r\n',
+    title: 'How does this app works?',
+    content: `At first the user needs to register herself by giving her name, email id, phone no.,  aadhar card number, etc . Then after signing in she has to give access to the camera ,location and all. The app will show her exact location on the home page. Now when the woman feels insecure she just need to shake the phone and the alert sms will be sent to her family, relatives or friends with her precise location.\r\n`,
     icon: {
-      name: 'keyboard',
-      family: 'material',
+      name: 'hand-pointing-right',
+      family: 'material-community',
       size: 30,
       color: '#779',
     },
   },
   {
-    title: 'Laborum enim magna in tempor dolore qui minim ?',
-    content:
-      'Dolore veniam tempor consequat nulla ad pariatur ipsum. Elit deserunt deserunt Lorem ipsum occaecat dolore exercitation magna elit mollit. Fugiat magna anim eiusmod elit. Ex dolore dolor tempor aliquip dolor et enim Lorem occaecat commodo commodo aliqua consectetur cupidatat. Aliqua ullamco ipsum labore magna anim elit velit esse ipsum minim officia ea. Quis ipsum est amet quis exercitation proident reprehenderit culpa. Duis dolor deserunt mollit voluptate esse ad est irure quis fugiat velit culpa.\r\n',
+    title:
+      'Is the data provided in the app by the user like aadharcard no., password ,etc. safe or not ?',
+    content: `Yes the app is absolutely reliable. Any information provided by the user is stored in an encrypted form so no information can be send to any third party or so, only the name and the email id of the user will be sent to her contacts along with her location for help./\r\n`,
     icon: {
-      name: 'keyboard',
-      family: 'material',
+      name: 'hand-pointing-right',
+      family: 'material-community',
       size: 30,
       color: '#264',
-    },
-  },
-  {
-    title: 'Labore ea sint nulla proident ea eu pariatur ?',
-    content:
-      'Aliquip mollit cupidatat dolore veniam. Sunt et duis nostrud reprehenderit. Pariatur reprehenderit eu nostrud minim est do cillum veniam ea mollit laborum. Dolor eiusmod eiusmod voluptate commodo elit sit reprehenderit nisi ea veniam est. Nisi ea eu commodo adipisicing qui laboris eiusmod qui. Occaecat pariatur cillum magna nisi fugiat cillum proident.\r\n',
-    icon: {
-      name: 'keyboard',
-      family: 'material',
-      size: 30,
-      color: '#830',
-    },
-  },
-  {
-    title:
-      'Cupidatat qui deserunt est labore et magna quis adipisicing culpa ea ad ?',
-    content:
-      'Reprehenderit consequat cupidatat irure minim dolore cillum id et dolore tempor excepteur aliquip aliqua. Labore proident ea velit ex veniam reprehenderit non. Quis velit aute consequat dolore sint dolore tempor non tempor esse. Ex ea incididunt aliqua dolore quis cillum non. Pariatur exercitation ipsum sint aliqua. Ullamco qui proident labore ea. Laborum irure ad incididunt id esse commodo.\r\n',
-    icon: {
-      name: 'keyboard',
-      family: 'material',
-      size: 30,
-      color: '#159',
-    },
-  },
-  {
-    title: 'What is test ?',
-    content: 'Reprehenderi id esse commodo.\r\n Test is Test.',
-    icon: {
-      name: 'keyboard',
-      family: 'material',
-      size: 30,
-      color: '#159',
-    },
-  },
-  {
-    title: 'What is Soujit ?',
-    content: 'Reprehenderi id esse commodo.\r\n Test is Subrata.',
-    icon: {
-      name: 'keyboard',
-      family: 'material',
-      size: 30,
-      color: '#159',
     },
   },
 ];
