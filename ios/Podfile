@@ -22,6 +22,8 @@ target 'WomenSafety' do
 
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
 
+  pod 'RNFullBatteryStatus', :path => '../node_modules/react-native-full-battery-status'
+
   target 'WomenSafetyTests' do
     inherit! :complete
     # Pods for testing

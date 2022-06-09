@@ -1,4 +1,6 @@
 rootProject.name = 'WomenSafety'
+include ':react-native-full-battery-status'
+project(':react-native-full-battery-status').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-full-battery-status/android')
 include ':react-native-push-notification'
 project(':react-native-push-notification').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-push-notification/android')
 include ':react-native-linear-gradient'

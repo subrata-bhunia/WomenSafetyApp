@@ -7,7 +7,9 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   StatusBar,
+  TextInput,
 } from 'react-native';
+import {Image} from 'react-native-elements';
 
 import {SwipeListView} from 'react-native-swipe-list-view';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -201,28 +203,35 @@ const NotificationScreen = ({navigation}) => {
       />
     );
   };
-
+  const [txt, settxt] = React.useState(true);
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-      {/* <StatusBar backgroundColor="#FF6347" barStyle="light-content"/> */}
-      <SwipeListView
-        data={listData}
-        renderItem={renderItem}
-        renderHiddenItem={renderHiddenItem}
-        leftOpenValue={75}
-        rightOpenValue={-150}
-        disableRightSwipe
-        onRowDidOpen={onRowDidOpen}
-        leftActivationValue={100}
-        rightActivationValue={-200}
-        leftActionValue={0}
-        rightActionValue={-500}
-        onLeftAction={onLeftAction}
-        onRightAction={onRightAction}
-        onLeftActionStatusChange={onLeftActionStatusChange}
-        onRightActionStatusChange={onRightActionStatusChange}
-      />
+    <View style={{}}>
+      <View>
+        <TextInput
+          placeholder="Password"
+          style={{
+            borderWidth: 1,
+            margin: 30,
+          }}
+          secureTextEntry={txt}
+        />
+        <TouchableOpacity
+          onPress={() => settxt(!txt)}
+          style={{alignSelf: 'center'}}>
+          <Image
+            source={
+              txt
+                ? {uri: 'https://cdn-icons-png.flaticon.com/512/159/159604.png'}
+                : {uri: 'https://cdn-icons-png.flaticon.com/512/565/565655.png'}
+            }
+            style={{
+              height: 40,
+              width: 40,
+              resizeMode: 'contain',
+            }}
+          />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };

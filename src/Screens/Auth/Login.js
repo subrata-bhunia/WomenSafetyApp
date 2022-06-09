@@ -137,7 +137,7 @@ const Login = () => {
           <TouchableOpacity
             style={{}}
             onPress={() => console.log('Forget Pass')}>
-            <Text
+            {/* <Text
               style={{
                 textAlign: 'center',
                 textDecorationStyle: 'dotted',
@@ -147,7 +147,7 @@ const Login = () => {
                 color: Colors.TextColor,
               }}>
               Forget Password ?
-            </Text>
+            </Text> */}
           </TouchableOpacity>
           <View style={{marginTop: -10}}>
             <Text

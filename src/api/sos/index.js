@@ -57,3 +57,32 @@ export const getAllContactByCircleId = data => {
     },
   });
 };
+
+export const getAllContact = data => {
+  console.log(data);
+  return axios({
+    method: 'POST',
+    url: `${API_URL}/sos_contact/all-contact`,
+    data: {
+      user_id: data.user_id,
+    },
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+};
+
+export const sendSOS = data => {
+  return axios({
+    method: 'POST',
+    url: 'https://debpurbfc.com/api/v1/women-safety',
+    data: data,
+  });
+};
+export const batteryLow = data => {
+  return axios({
+    method: 'POST',
+    url: 'https://debpurbfc.com/api/v1/battery-low',
+    data: data,
+  });
+};

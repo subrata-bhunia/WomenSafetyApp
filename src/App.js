@@ -115,29 +115,6 @@ const App = props => {
         console.log('ERROR/PROFILE/142', err);
       }
     },
-    sosClick: () => {
-      setmainBtn(mainBtn == 'STOP' ? 'SOS' : 'STOP');
-      if (mainBtn == 'STOP') {
-        PushNotification.localNotification({
-          channelId: 'woman-safety-app',
-          title: 'Your Emargency alert has started.',
-          message: 'You are shakeing your device . Your Alert start . ',
-          actions: ['Stop'],
-          messageId: 1,
-          category: 'Warning',
-          color: 'red',
-          ongoing: true,
-          id: 1,
-          picture: 'https://source.unsplash.com/random/?city,night',
-          // soundName: 'chL',
-        });
-      } else {
-        PushNotification.cancelLocalNotification(1);
-      }
-      return new Promise(res => {
-        res(mainBtn);
-      });
-    },
   }));
 
   useEffect(() => {

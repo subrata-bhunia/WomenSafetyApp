@@ -13,7 +13,7 @@ import React, {useEffect, useState} from 'react';
 import Contacts from 'react-native-contacts';
 import {Icon, SearchBar} from 'react-native-elements';
 import {Colors, FontFamily} from '../../Constants/constants';
-import SendSMS from 'react-native-sms';
+// import SendSMS from 'react-native-sms';
 import CustomLoader from '../../Components/CustomLoader';
 import Header from '../../Components/Header';
 import {UIStore} from '../../UIStore';
@@ -128,25 +128,25 @@ const ContactList = () => {
   const makeCall = phone => {
     Linking.openURL(`tel:${phone}`);
   };
-  const smsSend = phone => {
-    SendSMS.send(
-      {
-        body: `${SOS_SMS}`,
-        recipients: [`${phone}`],
-        successTypes: ['sent'],
-      },
-      (completed, cancelled, error) => {
-        console.log(
-          'SMS Callback: completed: ' +
-            completed +
-            ' cancelled: ' +
-            cancelled +
-            'error: ' +
-            error,
-        );
-      },
-    );
-  };
+  // const smsSend = phone => {
+  //   SendSMS.send(
+  //     {
+  //       body: `${SOS_SMS}`,
+  //       recipients: [`${phone}`],
+  //       successTypes: ['sent'],
+  //     },
+  //     (completed, cancelled, error) => {
+  //       console.log(
+  //         'SMS Callback: completed: ' +
+  //           completed +
+  //           ' cancelled: ' +
+  //           cancelled +
+  //           'error: ' +
+  //           error,
+  //       );
+  //     },
+  //   );
+  // };
   const sendWPsms = (phone, name) => {
     var SOS_SMS = `Alert! your friend in trouble now. Hi ${name}.It is a test sms send from Woman safety App.\nLast Location ${locationLink}\n🆘SMS SEND BY SUBRATA`;
     var phone_n = phone.split(' ').join('').replace('+91', '');

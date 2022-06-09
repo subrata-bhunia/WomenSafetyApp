@@ -40,21 +40,6 @@ const menuItem = [
     menuName: 'Contacts',
     iconColor: '#090',
   },
-
-  // {
-  //   iconName: 'notification',
-  //   iconType: 'antdesign',
-  //   navigate: 'Setting',
-  //   menuName: 'Notifications',
-  //   iconColor: Colors.color1,
-  // },
-  // {
-  //   iconName: 'document-text-outline',
-  //   iconType: 'ionicon',
-  //   navigate: 'Setting',
-  //   menuName: 'Documents',
-  //   iconColor: Colors.color2,
-  // },
   {
     iconName: 'ios-settings-outline',
     iconType: 'ionicon',

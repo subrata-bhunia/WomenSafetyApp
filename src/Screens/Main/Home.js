@@ -18,9 +18,14 @@ import chL from '../../../assets/voices/chL.mp3';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AuthContext} from '../../Components/context';
+import RNFullBatteryStatus from 'react-native-full-battery-status';
+import {batteryLow, getAllContact, sendSOS} from '../../api/sos';
+import PushNotification from 'react-native-push-notification';
+import RNShake from 'react-native-shake';
+import axios from 'axios';
 var Sound = require('react-native-sound');
 const Home = () => {
-  const {sosClick} = React.useContext(AuthContext);
+  // const {sosClick} = React.useContext(AuthContext);
   const [btnName, setbtnName] = useState('SOS');
   const currentLocation = UIStore.useState(s => s.lastLocation);
   Sound.setCategory('Playback');
@@ -44,10 +49,21 @@ const Home = () => {
     //     }
     //   });
   });
+  const user_id = UIStore.useState(s => s.userId);
+  const getAllSOSContact = () => {
+    getAllContact({user_id: user_id})
+      .then(res => {
+        if (res.data?.success == 1) {
+          setcircle(res.data?.data);
+        }
+      })
+      .catch(err => {
+        getAllSOSContact();
+      });
+  };
   const checkUserId = async () => {
     try {
       const value = await AsyncStorage.getItem('@userId');
-
       if (value !== null) {
         console.log('UserID/HOME', value);
         UIStore.update(s => {
@@ -84,7 +100,8 @@ const Home = () => {
     //   --------------
     checkUserId();
     // ------------
-  }, []);
+    getAllSOSContact();
+  }, [user_id]);
   // ------------------------------------------- //
   const navigation = useNavigation();
   const [region, setRegion] = React.useState({
@@ -124,7 +141,129 @@ const Home = () => {
   }
 
   // console.log("currentLocation =>",currentLocation)
+  const [circle, setcircle] = useState([]);
+  const [battery, setbattery] = useState();
+  // console.log(circle);
+  RNFullBatteryStatus.getBatteryPercent().then(res => {
+    setbattery(res);
+  });
+  const getRelation = relation => {
+    if (relation == 'brother') {
+      return 'Sister';
+    } else if (relation == 'father') {
+      return 'Daughter';
+    } else if (relation == 'mother') {
+      return 'Daughter';
+    } else if (relation == 'friend') {
+      return 'Friend';
+    } else if (relation == 'son') {
+      return 'Mother';
+    } else {
+      return 'Know Person';
+    }
+  };
+  const getFirstName = (full_name = '') => {
+    var name_arr = full_name.split(' ');
+    return name_arr[0];
+  };
+  // Battery 5%
+  useEffect(() => {
+    if (battery < 6) {
+      for (let i = 0; i < circle.length; i++) {
+        // console.log(battery);
+        batteryLow({
+          name: getFirstName(userDetail?.full_name),
+          relation: getRelation(circle[i]?.relation?.toLowerCase()),
+          phone: circle[i]?.phone1,
+          latitude: currentLocation.longitude,
+          longitude: currentLocation.latitude,
+        }).then(res => {
+          // console.log(res.data);
+        });
+      }
+    }
+  }, [battery]);
+  //  SOS PRESS
+  const SOSPRESS = () => {
+    for (let i = 0; i < circle.length; i++) {
+      // console.log(battery);
+      sendSOS({
+        name: getFirstName(userDetail?.full_name),
+        relation: getRelation(circle[i]?.relation?.toLowerCase()),
+        phone: circle[i]?.phone1,
+        latitude: currentLocation.longitude,
+        longitude: currentLocation.latitude,
+      });
+    }
+    PushNotification.localNotification({
+      channelId: 'woman-safety-app',
+      title: 'Your Emargency alert has started.',
+      message:
+        'You are press your sos botton . Your all contact are notified . ',
+      messageId: 1,
+      category: 'Warning',
+      color: 'red',
+      // ongoing: true,
+      id: 1,
+      // soundName: 'chL',
+    });
+  };
+  // SHAKE
+  React.useEffect(() => {
+    const subscription = RNShake.addListener(() => {
+      for (let i = 0; i < circle.length; i++) {
+        // console.log(battery);
+        sendSOS({
+          name: getFirstName(userDetail?.full_name),
+          relation: getRelation(circle[i]?.relation?.toLowerCase()),
+          phone: circle[i]?.phone1,
+          latitude: currentLocation.longitude,
+          longitude: currentLocation.latitude,
+        });
+      }
+      PushNotification.localNotification({
+        channelId: 'woman-safety-app',
+        title: 'Your Emargency alert has started.',
+        message:
+          'You are shakeing your device . Your Alert start to all contact. ',
+        // actions: ['Stop'],
+        messageId: 1,
+        category: 'Warning',
+        color: 'red',
+        // ongoing: true,
+        id: 1,
+        // picture: 'https://source.unsplash.com/random/?city,night',
+        // soundName: 'chL',
+      });
+    });
 
+    return () => {
+      // Your code here...
+      subscription.remove();
+    };
+  }, []);
+  const url = UIStore.useState(s => s.localUrl);
+  const [userDetail, setuserDetail] = useState(null);
+  const apiUrl = url + '/users/' + user_id;
+  const userDetails = async () => {
+    if (user_id) {
+      await axios({
+        method: 'get',
+        url: apiUrl,
+      })
+        .then(res => setuserDetail(res.data?.data))
+        .catch(err => {
+          if (err) {
+            console.log(err);
+            userDetails();
+          }
+        });
+    }
+  };
+  useEffect(() => {
+    userDetails();
+  }, []);
+  // console.log('userDetail', userDetail, '=', user_id);
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
@@ -319,7 +458,7 @@ const Home = () => {
           <TouchableOpacity
             //  onPress={()=>AsyncStorage.clear((err)=>console.log("Error Clear",err))}
             onPress={() => {
-              sosClick().then(res => setbtnName(res));
+              SOSPRESS();
             }}
             style={{
               height: 150,
@@ -340,7 +479,7 @@ const Home = () => {
                 color: '#fff',
                 fontSize: 30,
               }}>
-              {btnName}
+              SOS
             </Text>
           </TouchableOpacity>
         </View>
