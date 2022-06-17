@@ -15,7 +15,7 @@ import {UIStore} from '../../UIStore';
 import {Icon} from 'react-native-elements';
 import Button from '../../Components/Button';
 import chL from '../../../assets/voices/chL.mp3';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AuthContext} from '../../Components/context';
 import RNFullBatteryStatus from 'react-native-full-battery-status';
@@ -23,8 +23,10 @@ import {batteryLow, getAllContact, sendSOS} from '../../api/sos';
 import PushNotification from 'react-native-push-notification';
 import RNShake from 'react-native-shake';
 import axios from 'axios';
+import {ToastAndroid} from 'react-native';
 var Sound = require('react-native-sound');
 const Home = () => {
+  const isFocused = useIsFocused();
   // const {sosClick} = React.useContext(AuthContext);
   const [btnName, setbtnName] = useState('SOS');
   const currentLocation = UIStore.useState(s => s.lastLocation);
@@ -55,6 +57,7 @@ const Home = () => {
       .then(res => {
         if (res.data?.success == 1) {
           setcircle(res.data?.data);
+          ToastAndroid.show('Circles update', ToastAndroid.BOTTOM);
         }
       })
       .catch(err => {
@@ -101,7 +104,7 @@ const Home = () => {
     checkUserId();
     // ------------
     getAllSOSContact();
-  }, [user_id]);
+  }, [user_id, isFocused]);
   // ------------------------------------------- //
   const navigation = useNavigation();
   const [region, setRegion] = React.useState({
@@ -112,8 +115,8 @@ const Home = () => {
   const onPressZoomIn = () => {
     var add = {
       ...region,
-      latitudeDelta: region.latitudeDelta * 10,
-      longitudeDelta: region.longitudeDelta * 10,
+      latitudeDelta: region.latitudeDelta * 5,
+      longitudeDelta: region.longitudeDelta * 5,
     };
 
     setRegion(add);
@@ -123,8 +126,8 @@ const Home = () => {
   const onPressZoomOut = () => {
     var minus = {
       ...region,
-      latitudeDelta: region.latitudeDelta / 10,
-      longitudeDelta: region.longitudeDelta / 10,
+      latitudeDelta: region.latitudeDelta / 5,
+      longitudeDelta: region.longitudeDelta / 5,
     };
     setRegion(minus);
     // map.animateToRegion(region, 100);
@@ -175,8 +178,8 @@ const Home = () => {
           name: getFirstName(userDetail?.full_name),
           relation: getRelation(circle[i]?.relation?.toLowerCase()),
           phone: circle[i]?.phone1,
-          latitude: currentLocation.longitude,
-          longitude: currentLocation.latitude,
+          latitude: currentLocation.latitude,
+          longitude: currentLocation.longitude,
         }).then(res => {
           // console.log(res.data);
         });
@@ -186,56 +189,32 @@ const Home = () => {
   //  SOS PRESS
   const SOSPRESS = () => {
     for (let i = 0; i < circle.length; i++) {
-      // console.log(battery);
+      console.log(battery);
       sendSOS({
         name: getFirstName(userDetail?.full_name),
         relation: getRelation(circle[i]?.relation?.toLowerCase()),
         phone: circle[i]?.phone1,
-        latitude: currentLocation.longitude,
-        longitude: currentLocation.latitude,
-      });
+        latitude: currentLocation.latitude,
+        longitude: currentLocation.longitude,
+      })
+        .then(res => console.log(res.data))
+        .catch(err => console.log(err));
     }
     PushNotification.localNotification({
       channelId: 'woman-safety-app',
       title: 'Your Emargency alert has started.',
       message:
-        'You are press your sos botton . Your all contact are notified . ',
+        'You are press your sos botton or shake your device . Your all contact are notified . ',
       messageId: 1,
       category: 'Warning',
       color: 'red',
-      // ongoing: true,
+
       id: 1,
-      // soundName: 'chL',
     });
   };
   // SHAKE
   React.useEffect(() => {
-    const subscription = RNShake.addListener(() => {
-      for (let i = 0; i < circle.length; i++) {
-        // console.log(battery);
-        sendSOS({
-          name: getFirstName(userDetail?.full_name),
-          relation: getRelation(circle[i]?.relation?.toLowerCase()),
-          phone: circle[i]?.phone1,
-          latitude: currentLocation.longitude,
-          longitude: currentLocation.latitude,
-        });
-      }
-      PushNotification.localNotification({
-        channelId: 'woman-safety-app',
-        title: 'Your Emargency alert has started.',
-        message:
-          'You are shakeing your device . Your Alert start to all contact. ',
-        // actions: ['Stop'],
-        messageId: 1,
-        category: 'Warning',
-        color: 'red',
-        // ongoing: true,
-        id: 1,
-        // picture: 'https://source.unsplash.com/random/?city,night',
-        // soundName: 'chL',
-      });
-    });
+    const subscription = RNShake.addListener(() => SOSPRESS());
 
     return () => {
       // Your code here...
@@ -251,7 +230,10 @@ const Home = () => {
         method: 'get',
         url: apiUrl,
       })
-        .then(res => setuserDetail(res.data?.data))
+        .then(res => {
+          setuserDetail(res.data?.data),
+            ToastAndroid.show('Profile data fetched', ToastAndroid.BOTTOM);
+        })
         .catch(err => {
           if (err) {
             console.log(err);
@@ -312,8 +294,6 @@ const Home = () => {
               longitude: currentLocation.longitude + 0.001,
               latitudeDelta: 0.1,
             }}
-            title="Test Title"
-            description="Test Description"
           />
           <Marker
             coordinate={{
@@ -322,8 +302,6 @@ const Home = () => {
               longitude: currentLocation.longitude + 0.0021,
               latitudeDelta: 0.1,
             }}
-            title="Test Title"
-            description="Test Description"
           />
           <Marker
             coordinate={{
@@ -332,10 +310,6 @@ const Home = () => {
               longitude: currentLocation.longitude - 0.001,
               latitudeDelta: 0.1,
             }}
-            //  pinColor='red'
-            //  image={require('../../../assets/images/icons/red.png')}
-            title="Test Title"
-            description="Test Description"
           />
           <Marker
             coordinate={{
@@ -420,7 +394,7 @@ const Home = () => {
           }}>
           <View>
             <TouchableOpacity
-              onPress={() => onPressZoomIn()}
+              onPress={() => onPressZoomOut()}
               style={{
                 height: 50,
                 width: 50,
@@ -436,7 +410,7 @@ const Home = () => {
           </View>
           <View>
             <TouchableOpacity
-              onPress={() => onPressZoomOut()}
+              onPress={() => onPressZoomIn()}
               style={{
                 height: 50,
                 width: 50,
